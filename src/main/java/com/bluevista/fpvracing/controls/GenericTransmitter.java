@@ -1,5 +1,6 @@
 package com.bluevista.fpvracing.controls;
 
+import org.codehaus.plexus.util.Os;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
@@ -16,7 +17,11 @@ public class GenericTransmitter {
 		}
 		
 		Controllers.poll();		
-		controller = Controllers.getController(3);
+		if(Os.OS_NAME.contains("Windows")) {
+			controller = Controllers.getController(3);
+		} else {
+			controller = Controllers.getController(0);
+		}
 
 		System.out.println("Controllers: ");
 		for(int i = 0; i < Controllers.getControllerCount(); i++) {
