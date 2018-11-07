@@ -15,15 +15,20 @@ public class GenericTransmitter {
 			e.printStackTrace();
 		}
 		
-		Controllers.poll();
-		controller = Controllers.getController(0);
-		for(int i = 0; i < controller.getAxisCount(); i++) {
-			System.out.println(controller.getAxisName(i) + ", " + controller.getAxisValue(i));
+		Controllers.poll();		
+		controller = Controllers.getController(3);
+
+		System.out.println("Controllers: ");
+		for(int i = 0; i < Controllers.getControllerCount(); i++) {
+//			if(Controllers.getController(i).getAxisCount() == 8) {
+//				controller = Controllers.getController(i);
+//			}
+			System.out.println(Controllers.getController(i).getName() + ", " + Controllers.getController(i).getAxisCount());
 		}
 	}
 	
 	public float getRawAxis(int axis) {
-		return controller.getAxisValue(axis);
+		return controller.getAxisValue(axis+4);
 	}
 	
 	public float getFilteredAxis(int axis, float rate, float expo, float superRate) { // logistic yo

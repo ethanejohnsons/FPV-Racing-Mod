@@ -66,6 +66,8 @@ public class EntityDrone extends Entity {
 		
 		//this.enforceHeightLimit(200);
 		this.doPhysics();
+		
+//		System.out.println(FPVRacingMod.transmitter.getRawAxis(0) + ", " + FPVRacingMod.transmitter.getRawAxis(1) + ", " + FPVRacingMod.transmitter.getRawAxis(2) + ", " + FPVRacingMod.transmitter.getRawAxis(3));
 				
 		this.orientation.normalise();
 		
@@ -123,10 +125,15 @@ public class EntityDrone extends Entity {
 		if(this.isBeingRidden()) {
 			GenericTransmitter t = FPVRacingMod.transmitter;
 
-			this.changePitch(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
-			this.changeYaw(-t.getFilteredAxis(3, 1.0f, 0.5f, 0.65f));
-			this.changeRoll(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
-			this.throttle = (t.getRawAxis(0) + 1) / 8;
+//			this.changePitch(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
+//			this.changeYaw(-t.getFilteredAxis(3, 1.0f, 0.5f, 0.65f));
+//			this.changeRoll(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
+//			this.throttle = (t.getRawAxis(0) + 1) / 8;
+			
+			this.changePitch(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
+			this.changeYaw(-t.getFilteredAxis(0, 1.0f, 0.5f, 0.65f));
+			this.changeRoll(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
+			this.throttle = (t.getRawAxis(3) + 1) / 8;
 			
 //			if(this.upPitch) {	
 //				this.changePitch(2);
