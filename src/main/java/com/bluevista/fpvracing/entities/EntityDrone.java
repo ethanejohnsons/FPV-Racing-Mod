@@ -11,7 +11,6 @@ import com.bluevista.fpvracing.controls.GenericTransmitter;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
@@ -27,11 +26,15 @@ public class EntityDrone extends Entity {
     
     private Quaternion orientation;
     private double throttle;
+    
     private int camera_angle;
+    private int fov;
     
     private double terminalVelocity;
     
-    private double axis[] = new double[4];
+    private float[] original_player = new float[4]; // x, y, z, fov
+    
+    private double axis[] = new double[4]; // input
                 
 	public EntityDrone(World worldIn) {
 		super(worldIn);
@@ -44,7 +47,9 @@ public class EntityDrone extends Entity {
                 
         this.terminalVelocity = 1.5;
         
-    	this.camera_angle = 10; // degrees
+    	this.camera_angle = 15; // degrees
+    	this.fov = 100;
+    	
         this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);    
 	}
 	
@@ -54,6 +59,7 @@ public class EntityDrone extends Entity {
 		
 		// Client Stuff
 		this.updateInputs();
+		this.setInvisible(true);
 						
 		// Common Stuff
 		this.dismountCheck();				
@@ -70,8 +76,11 @@ public class EntityDrone extends Entity {
 		// If the player isn't 'riding' the drone but the camera is still fixed on it,
 		// change it back to the player 
 		if(!this.world.isRemote)
-	        if(!this.isBeingRidden() && Minecraft.getMinecraft().getRenderViewEntity() == this)
+	        if(!this.isBeingRidden() && Minecraft.getMinecraft().getRenderViewEntity() == this) {
 		    	Minecraft.getMinecraft().setRenderViewEntity(Minecraft.getMinecraft().player);
+        		Minecraft.getMinecraft().gameSettings.fovSetting = original_player[3];
+        		Minecraft.getMinecraft().player.setPosition(original_player[0], original_player[1], original_player[2]);
+	        }
 	}
 	
 	public void doPhysics() {
@@ -109,7 +118,6 @@ public class EntityDrone extends Entity {
 			this.changeYaw((float) axis[1]);
 			this.changeRoll((float) axis[2]);
 			this.setThrottle((float) axis[3]);
-			
 		}
 		
 	}
@@ -136,6 +144,13 @@ public class EntityDrone extends Entity {
             Minecraft.getMinecraft().setRenderViewEntity(this);
      		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
             player.startRiding(this);
+            
+            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
+            original_player[0] = (float) player.posX;
+            original_player[1] = (float) player.posY;
+            original_player[2] = (float) player.posZ;
+
+            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
          }
 
          return true;
