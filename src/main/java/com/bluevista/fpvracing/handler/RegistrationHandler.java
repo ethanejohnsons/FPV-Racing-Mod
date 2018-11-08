@@ -1,5 +1,6 @@
-package com.bluevista.fpvracing;
+package com.bluevista.fpvracing.handler;
 
+import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.items.ItemDrone;
 
 import net.minecraft.item.Item;

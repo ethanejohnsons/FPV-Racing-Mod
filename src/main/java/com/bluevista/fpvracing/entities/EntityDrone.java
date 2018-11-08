@@ -24,15 +24,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityDrone extends Entity {
-	
-    private boolean upPitch;
-    private boolean downPitch;
-    private boolean leftRoll;
-    private boolean rightRoll;
-    private boolean leftYaw;
-    private boolean rightYaw;
-    private boolean throttleUp;
-    private boolean throttleDown;
     
     private Quaternion orientation;
     private double throttle;
@@ -138,55 +129,6 @@ public class EntityDrone extends Entity {
 				this.throttle = (t.getRawAxis(3) + 1) / 8;
 			}
 			
-//			if(this.upPitch) {	
-//				this.changePitch(2);
-//				logger.logToFile("Orientation", "I", orientation.getX(), orientation.getY(), orientation.getZ(), orientation.getW());
-//				logger.logToFile("Thrust", "I", thrust.getX(), thrust.getY(), thrust.getZ(), thrust.getW());
-//				logger.logBlankLineToFile();
-//			}
-//			if(this.downPitch) {
-//				this.changePitch(-2);
-//				logger.logToFile("Orientation", "K", orientation.getX(), orientation.getY(), orientation.getZ(), orientation.getW());
-//				logger.logToFile("Thrust", "K", thrust.getX(), thrust.getY(), thrust.getZ(), thrust.getW());
-//				logger.logBlankLineToFile();
-//			}
-//			if (this.leftRoll) {
-//				this.changeRoll(-2);
-//				logger.logToFile("Orientation", "J", orientation.getX(), orientation.getY(), orientation.getZ(), orientation.getW());
-//				logger.logToFile("Thrust", "J", thrust.getX(), thrust.getY(), thrust.getZ(), thrust.getW());
-//				logger.logBlankLineToFile();
-//			}
-//			if(this.rightRoll) {
-//				this.changeRoll(2);
-//				logger.logToFile("Orientation", "L", orientation.getX(), orientation.getY(), orientation.getZ(), orientation.getW());
-//				logger.logToFile("Thrust", "L", thrust.getX(), thrust.getY(), thrust.getZ(), thrust.getW());
-//				logger.logBlankLineToFile();
-//			}
-//			if(this.leftYaw) {
-//				this.changeYaw(2);
-//				logger.logToFile("Orientation", "U", orientation.getX(), orientation.getY(), orientation.getZ(), orientation.getW());
-//				logger.logToFile("Thrust", "U", thrust.getX(), thrust.getY(), thrust.getZ(), thrust.getW());
-//				logger.logBlankLineToFile();
-//			}
-//			if (this.rightYaw) {
-//				this.changeYaw(-2);
-//				logger.logToFile("Orientation", "O", orientation.getX(), orientation.getY(), orientation.getZ(), orientation.getW());
-//				logger.logToFile("Thrust", "O", thrust.getX(), thrust.getY(), thrust.getZ(), thrust.getW());
-//				logger.logBlankLineToFile();
-//			}
-//			
-//			if(this.throttleUp) { 
-//				if(this.throttle < 0.1) { // TODO Fix this if statement later
-//					this.throttle += 0.005;
-//				}
-//			}
-//			
-//			if(this.throttleDown) {
-//				if(this.throttle > 0) {
-//					this.throttle -= 0.005;
-//				}
-//			}
-			
 		}
 		
 	}
@@ -219,15 +161,7 @@ public class EntityDrone extends Entity {
     
     @SideOnly(Side.CLIENT)
     public void updateInputs() {
-    	upPitch		= GameSettings.isKeyDown(FPVRacingMod.dronePitchForward);
-    	downPitch	= GameSettings.isKeyDown(FPVRacingMod.dronePitchBack);
-    	leftRoll 	= GameSettings.isKeyDown(FPVRacingMod.droneRollLeft);
-    	rightRoll 	= GameSettings.isKeyDown(FPVRacingMod.droneRollRight);
-    	leftYaw 	= GameSettings.isKeyDown(FPVRacingMod.droneYawLeft);
-    	rightYaw 	= GameSettings.isKeyDown(FPVRacingMod.droneYawRight);
-    	
-    	throttleUp = GameSettings.isKeyDown(FPVRacingMod.droneThrottleUp);
-    	throttleDown = GameSettings.isKeyDown(FPVRacingMod.droneThrottleDown);
+    	// Keys go here
     }
 
     public Quaternion getOrientation() {
