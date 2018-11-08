@@ -27,6 +27,7 @@ public class EntityDrone extends Entity {
     private Quaternion orientation;
     private double throttle;
     
+    private int channel;
     private int camera_angle;
     private int fov;
     
@@ -42,11 +43,11 @@ public class EntityDrone extends Entity {
 
 	@Override
 	protected void entityInit() {
-		//Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
         this.setSize(0.6F, 0.5625F);
                 
         this.terminalVelocity = 1.5;
         
+        this.channel = 0; // r band of course :)
     	this.camera_angle = 15; // degrees
     	this.fov = 100;
     	
@@ -82,7 +83,27 @@ public class EntityDrone extends Entity {
         		Minecraft.getMinecraft().player.setPosition(original_player[0], original_player[1], original_player[2]);
 	        }
 	}
-	
+
+    @SideOnly(Side.CLIENT)
+	public void mountCheck() {
+		// If the player isn't 'riding' the drone but the camera is fixed on it,
+		// make the player ride the drone
+		if(!this.world.isRemote) {
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			
+//            Minecraft.getMinecraft().setRenderViewEntity(this);
+//     		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
+            player.startRiding(this);
+            
+            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
+            original_player[0] = (float) player.posX;
+            original_player[1] = (float) player.posY;
+            original_player[2] = (float) player.posZ;
+
+            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
+		}
+	}
+    
 	public void doPhysics() {
 		if(this.motionY >= -terminalVelocity)
 			this.motionY -= 0.06D; // Gravity
@@ -141,16 +162,16 @@ public class EntityDrone extends Entity {
 	// Right Click on the entity
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
     	 if (!this.world.isRemote) {
-            Minecraft.getMinecraft().setRenderViewEntity(this);
-     		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
-            player.startRiding(this);
-            
-            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
-            original_player[0] = (float) player.posX;
-            original_player[1] = (float) player.posY;
-            original_player[2] = (float) player.posZ;
-
-            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
+//            Minecraft.getMinecraft().setRenderViewEntity(this);
+//     		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
+//            player.startRiding(this);
+//            
+//            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
+//            original_player[0] = (float) player.posX;
+//            original_player[1] = (float) player.posY;
+//            original_player[2] = (float) player.posZ;
+//
+//            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
          }
 
          return true;
