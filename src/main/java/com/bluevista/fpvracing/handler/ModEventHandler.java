@@ -1,7 +1,8 @@
-package com.bluevista.fpvracing;
+package com.bluevista.fpvracing.handler;
 
 import org.lwjgl.opengl.GL11;
 
+import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.entities.EntityDrone;
 import com.bluevista.fpvracing.items.ItemDrone;
 import com.bluevista.fpvracing.math.QuaternionHelper;

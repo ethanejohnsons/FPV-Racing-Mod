@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.bluevista.fpvracing.controls.GenericTransmitter;
 import com.bluevista.fpvracing.entities.EntityDrone;
+import com.bluevista.fpvracing.handler.ModEventHandler;
 
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;

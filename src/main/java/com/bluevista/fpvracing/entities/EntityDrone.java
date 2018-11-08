@@ -48,7 +48,7 @@ public class EntityDrone extends Entity {
 	protected void entityInit() {
 		//Minecraft.getMinecraft().gameSettings.thirdPersonView = 1;
         this.setSize(0.6F, 0.5625F);
-        
+                
         this.terminalVelocity = 1.5;
         
     	this.camera_angle = 15; // 30 degree angle
@@ -272,12 +272,10 @@ public class EntityDrone extends Entity {
         return !this.isDead;
     }
 
-    
+    @Override
     public void updatePassenger(Entity passenger)
     {
-        if (this.isPassenger(passenger)) {
-//            passenger.setPosition(this.posX, this.posY, this.posZ );
-        }
+        passenger.setPosition(this.posX, this.posY, this.posZ);
     }
 
 	@Override
