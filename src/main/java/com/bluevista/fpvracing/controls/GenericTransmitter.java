@@ -1,14 +1,15 @@
 package com.bluevista.fpvracing.controls;
 
-import org.codehaus.plexus.util.Os;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
+import com.bluevista.fpvracing.OSValidator;
+
 public class GenericTransmitter {
 	
 	private Controller controller;
-
+	
 	public GenericTransmitter() {
 		try {
 			Controllers.create();
@@ -17,12 +18,12 @@ public class GenericTransmitter {
 		}
 		
 		Controllers.poll();		
-		if(Os.OS_NAME.contains("Windows")) {
+		if(OSValidator.isWindows()) {
 			controller = Controllers.getController(3);
 		} else {
 			controller = Controllers.getController(0);
 		}
-
+	
 		System.out.println("Controllers: ");
 		for(int i = 0; i < Controllers.getControllerCount(); i++) {
 //			if(Controllers.getController(i).getAxisCount() == 8) {
@@ -33,7 +34,11 @@ public class GenericTransmitter {
 	}
 	
 	public float getRawAxis(int axis) {
-		return controller.getAxisValue(axis+4);
+		if(OSValidator.isWindows()) {
+			return controller.getAxisValue(axis+4);
+		} else {
+			return controller.getAxisValue(axis);
+		}
 	}
 	
 	public float getFilteredAxis(int axis, float rate, float expo, float superRate) { // logistic yo

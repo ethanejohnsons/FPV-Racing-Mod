@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.bluevista.fpvracing.FPVRacingMod;
+import com.bluevista.fpvracing.OSValidator;
 import com.bluevista.fpvracing.controls.GenericTransmitter;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
@@ -125,15 +126,17 @@ public class EntityDrone extends Entity {
 		if(this.isBeingRidden()) {
 			GenericTransmitter t = FPVRacingMod.transmitter;
 
-//			this.changePitch(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
-//			this.changeYaw(-t.getFilteredAxis(3, 1.0f, 0.5f, 0.65f));
-//			this.changeRoll(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
-//			this.throttle = (t.getRawAxis(0) + 1) / 8;
-			
-			this.changePitch(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
-			this.changeYaw(-t.getFilteredAxis(0, 1.0f, 0.5f, 0.65f));
-			this.changeRoll(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
-			this.throttle = (t.getRawAxis(3) + 1) / 8;
+			if(OSValidator.isMac()) {
+				this.changePitch(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
+				this.changeYaw(-t.getFilteredAxis(3, 1.0f, 0.5f, 0.65f));
+				this.changeRoll(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
+				this.throttle = (t.getRawAxis(0) + 1) / 8;
+			} else if(OSValidator.isWindows()) {	
+				this.changePitch(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
+				this.changeYaw(-t.getFilteredAxis(0, 1.0f, 0.5f, 0.65f));
+				this.changeRoll(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
+				this.throttle = (t.getRawAxis(3) + 1) / 8;
+			}
 			
 //			if(this.upPitch) {	
 //				this.changePitch(2);
