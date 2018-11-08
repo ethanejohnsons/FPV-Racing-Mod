@@ -1,18 +1,13 @@
 package com.bluevista.fpvracing;
 
-import org.apache.logging.log4j.Logger;
-import org.lwjgl.input.Keyboard;
-
 import com.bluevista.fpvracing.controls.GenericTransmitter;
 import com.bluevista.fpvracing.entities.EntityDrone;
 import com.bluevista.fpvracing.handler.CameraHandler;
 import com.bluevista.fpvracing.handler.ModEventHandler;
 import com.bluevista.fpvracing.handler.RegistrationHandler;
 
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

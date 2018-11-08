@@ -30,6 +30,8 @@ public class EntityDrone extends Entity {
     private int camera_angle;
     
     private double terminalVelocity;
+    
+    private double axis[] = new double[4];
                 
 	public EntityDrone(World worldIn) {
 		super(worldIn);
@@ -42,46 +44,34 @@ public class EntityDrone extends Entity {
                 
         this.terminalVelocity = 1.5;
         
-    	this.camera_angle = 15; // 30 degree angle
+    	this.camera_angle = 10; // degrees
         this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);    
 	}
 	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.dismountCheck();				
 		
+		// Client Stuff
 		this.updateInputs();
+						
+		// Common Stuff
+		this.dismountCheck();				
 		this.control();
-		
-		//this.getRidingEntity().setPosition(this.posX, this.posY, this.posZ);
-		
-		//this.enforceHeightLimit(200);
 		this.doPhysics();
-		
-//		System.out.println(FPVRacingMod.transmitter.getRawAxis(0) + ", " + FPVRacingMod.transmitter.getRawAxis(1) + ", " + FPVRacingMod.transmitter.getRawAxis(2) + ", " + FPVRacingMod.transmitter.getRawAxis(3));
-				
+	
 		this.orientation.normalise();
-		
-//      if(this.isBeingRidden() && Minecraft.getMinecraft().getRenderViewEntity() == this) {
-//    	 	Minecraft.getMinecraft().player.setPosition(posX, posY + 1, posZ);
-//      }
 		
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 	}
 	
+    @SideOnly(Side.CLIENT)
 	public void dismountCheck() {
 		// If the player isn't 'riding' the drone but the camera is still fixed on it,
 		// change it back to the player 
 		if(!this.world.isRemote)
 	        if(!this.isBeingRidden() && Minecraft.getMinecraft().getRenderViewEntity() == this)
 		    	Minecraft.getMinecraft().setRenderViewEntity(Minecraft.getMinecraft().player);
-	}
-	
-	public void enforceHeightLimit(int limit) {
-		if(this.posY > limit) {
-			this.throttle = 0;
-		}
 	}
 	
 	public void doPhysics() {
@@ -115,37 +105,29 @@ public class EntityDrone extends Entity {
 	public void control() {
 
 		if(this.isBeingRidden()) {
-			GenericTransmitter t = FPVRacingMod.transmitter;
-
-			if(OSValidator.isMac()) {
-				this.changePitch(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
-				this.changeYaw(-t.getFilteredAxis(3, 1.0f, 0.5f, 0.65f));
-				this.changeRoll(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
-				this.throttle = (t.getRawAxis(0) + 1) / 8;
-			} else if(OSValidator.isWindows()) {	
-				this.changePitch(-t.getFilteredAxis(1, 1.0f, 0.5f, 0.65f));
-				this.changeYaw(-t.getFilteredAxis(0, 1.0f, 0.5f, 0.65f));
-				this.changeRoll(-t.getFilteredAxis(2, 1.0f, 0.5f, 0.65f));
-				this.throttle = (t.getRawAxis(3) + 1) / 8;
-			}
+			this.changePitch((float) axis[0]);
+			this.changeYaw((float) axis[1]);
+			this.changeRoll((float) axis[2]);
+			this.setThrottle((float) axis[3]);
 			
 		}
 		
 	}
 	
-	// Negative is down, Positive is up
 	public void changePitch(float angle) {
 		orientation = QuaternionHelper.rotateX(orientation, angle);
 	}
 	
-	// Negative is right, Positive is left
 	public void changeRoll(float angle) {
 		orientation = QuaternionHelper.rotateZ(orientation, angle);
 	}
 	
-	// Negative is right, Positive is left
 	public void changeYaw(float angle) {
 		orientation = QuaternionHelper.rotateY(orientation, angle);
+	}
+	
+	public void setThrottle(float throttle) {
+		this.throttle = throttle;
 	}
 	
 	// Right Click on the entity
@@ -161,7 +143,24 @@ public class EntityDrone extends Entity {
     
     @SideOnly(Side.CLIENT)
     public void updateInputs() {
-    	// Keys go here
+    	int[] order = new int[4];
+		if(OSValidator.isMac()) {
+			order[0] = 2;
+			order[1] = 3;
+			order[2] = 1;
+			order[3] = 0;
+		} else {
+			order[0] = 1;
+			order[1] = 0;
+			order[2] = 2;
+			order[3] = 3;
+		}
+    	
+		GenericTransmitter t = FPVRacingMod.transmitter;
+		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
+		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
+		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
+		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 12;		   // throttle
     }
 
     public Quaternion getOrientation() {
