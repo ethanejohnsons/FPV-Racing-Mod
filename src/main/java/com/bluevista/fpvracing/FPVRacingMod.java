@@ -30,7 +30,7 @@ public class FPVRacingMod {
         
         initKeybinds();
         
-        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"), EntityDrone.class, "drone", 0, this, 100, 1, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"), EntityDrone.class, "drone", 0, this, 100, 3, true);
         
         transmitter = new GenericTransmitter();
     }

@@ -33,7 +33,7 @@ public class EntityDrone extends Entity {
     
     private double terminalVelocity;
     
-    private float[] original_player = new float[4]; // x, y, z, fov
+//    private float[] original_player = new float[4]; // x, y, z, fov
     
     private double axis[] = new double[4]; // input
                 
@@ -43,7 +43,7 @@ public class EntityDrone extends Entity {
 
 	@Override
 	protected void entityInit() {
-        this.setSize(0.6F, 0.5625F);
+		this.setSize(0.6F, 0.5625F);
                 
         this.terminalVelocity = 1.5;
         
@@ -60,12 +60,19 @@ public class EntityDrone extends Entity {
 		
 		// Client Stuff
 		this.updateInputs();
-		this.setInvisible(true);
+		//this.setInvisible(true);
 						
 		// Common Stuff
+		//this.mountCheck();
 		this.dismountCheck();				
 		this.control();
 		this.doPhysics();
+		
+		if(this.isBeingRidden()) {
+			this.setSize(0, 0);
+		} else {
+			this.setSize(0.6F, 0.5625F);
+		}
 	
 		this.orientation.normalise();
 		
@@ -79,8 +86,8 @@ public class EntityDrone extends Entity {
 		if(!this.world.isRemote)
 	        if(!this.isBeingRidden() && Minecraft.getMinecraft().getRenderViewEntity() == this) {
 		    	Minecraft.getMinecraft().setRenderViewEntity(Minecraft.getMinecraft().player);
-        		Minecraft.getMinecraft().gameSettings.fovSetting = original_player[3];
-        		Minecraft.getMinecraft().player.setPosition(original_player[0], original_player[1], original_player[2]);
+//        		Minecraft.getMinecraft().gameSettings.fovSetting = original_player[3];
+//        		Minecraft.getMinecraft().player.setPosition(original_player[0], original_player[1], original_player[2]);
 	        }
 	}
 
@@ -89,18 +96,20 @@ public class EntityDrone extends Entity {
 		// If the player isn't 'riding' the drone but the camera is fixed on it,
 		// make the player ride the drone
 		if(!this.world.isRemote) {
-			EntityPlayer player = Minecraft.getMinecraft().player;
-			
-//            Minecraft.getMinecraft().setRenderViewEntity(this);
-//     		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
-            player.startRiding(this);
-            
-            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
-            original_player[0] = (float) player.posX;
-            original_player[1] = (float) player.posY;
-            original_player[2] = (float) player.posZ;
+			if(Minecraft.getMinecraft().getRenderViewEntity() == this) {
+				EntityPlayer player = Minecraft.getMinecraft().player;
+				player.startRiding(this);
 
-            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
+				Minecraft.getMinecraft().setRenderViewEntity(this);
+     			Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
+            
+//            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
+//            original_player[0] = (float) player.posX;
+//            original_player[1] = (float) player.posY;
+//            original_player[2] = (float) player.posZ;
+
+//            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
+			}
 		}
 	}
     
@@ -159,12 +168,16 @@ public class EntityDrone extends Entity {
 		this.throttle = throttle;
 	}
 	
+	public int getChannel() {
+		return channel;
+	}
+	
 	// Right Click on the entity
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
     	 if (!this.world.isRemote) {
-//            Minecraft.getMinecraft().setRenderViewEntity(this);
-//     		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
-//            player.startRiding(this);
+            Minecraft.getMinecraft().setRenderViewEntity(this);
+     		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
+            player.startRiding(this);
 //            
 //            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
 //            original_player[0] = (float) player.posX;

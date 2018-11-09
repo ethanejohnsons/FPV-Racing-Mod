@@ -18,18 +18,19 @@ public class GenericTransmitter {
 		}
 		
 		Controllers.poll();		
-		if(OSValidator.isWindows()) {
-			controller = Controllers.getController(3);
-		} else {
-			controller = Controllers.getController(0);
-		}
-	
+		
 		System.out.println("Controllers: ");
 		for(int i = 0; i < Controllers.getControllerCount(); i++) {
 //			if(Controllers.getController(i).getAxisCount() == 8) {
 //				controller = Controllers.getController(i);
 //			}
 			System.out.println(Controllers.getController(i).getName() + ", " + Controllers.getController(i).getAxisCount());
+		}
+		
+		if(OSValidator.isWindows()) {
+			controller = Controllers.getController(3);
+		} else {
+			controller = Controllers.getController(0);
 		}
 	}
 	

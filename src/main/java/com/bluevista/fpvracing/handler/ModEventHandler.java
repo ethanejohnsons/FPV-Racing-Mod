@@ -39,6 +39,12 @@ public class ModEventHandler {
 	}
 	
 //	@SubscribeEvent
+//	@SideOnly(Side.CLIENT)
+//	public static void onPlayerTick(PlayerTickEvent event) {
+//		
+//	}
+//	
+//	@SubscribeEvent
 //	public static void onEntityInteract(EntityInteract event) {
 //		if(event.getTarget() instanceof EntityDrone) {
 //			//((EntityDrone) event.getTarget()).connect();
