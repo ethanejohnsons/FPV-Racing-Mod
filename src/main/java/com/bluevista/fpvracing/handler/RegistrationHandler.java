@@ -3,6 +3,7 @@ package com.bluevista.fpvracing.handler;
 import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.items.ItemDrone;
 import com.bluevista.fpvracing.items.ItemGoggles;
+import com.bluevista.fpvracing.items.ItemTransmitter;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
@@ -14,11 +15,13 @@ public class RegistrationHandler {
 	
     public static final ItemDrone DRONE_SPAWNER = new ItemDrone();
     public static final ItemGoggles DRONE_GOGGLES = new ItemGoggles();
+    public static final ItemTransmitter DRONE_TRANSMITTER = new ItemTransmitter();
 	
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event) {
         event.getRegistry().register(DRONE_SPAWNER);
         event.getRegistry().register(DRONE_GOGGLES);
+        event.getRegistry().register(DRONE_TRANSMITTER);
     }   
    
 }

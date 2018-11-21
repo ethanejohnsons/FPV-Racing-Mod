@@ -7,7 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.OSValidator;
-import com.bluevista.fpvracing.controls.GenericTransmitter;
+import com.bluevista.fpvracing.controls.ControllerTaranis;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.client.Minecraft;
@@ -33,7 +33,6 @@ public class EntityDrone extends Entity {
     
     private double terminalVelocity;
     
-//    private float[] original_player = new float[4]; // x, y, z, fov
     
     private double axis[] = new double[4]; // input
                 
@@ -60,19 +59,12 @@ public class EntityDrone extends Entity {
 		
 		// Client Stuff
 		this.updateInputs();
-		//this.setInvisible(true);
 						
 		// Common Stuff
 		//this.mountCheck();
 		this.dismountCheck();				
 		this.control();
 		this.doPhysics();
-		
-		if(this.isBeingRidden()) {
-			this.setSize(0, 0);
-		} else {
-			this.setSize(0.6F, 0.5625F);
-		}
 	
 		this.orientation.normalise();
 		
@@ -102,13 +94,6 @@ public class EntityDrone extends Entity {
 
 				Minecraft.getMinecraft().setRenderViewEntity(this);
      			Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
-            
-//            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
-//            original_player[0] = (float) player.posX;
-//            original_player[1] = (float) player.posY;
-//            original_player[2] = (float) player.posZ;
-
-//            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
 			}
 		}
 	}
@@ -178,15 +163,7 @@ public class EntityDrone extends Entity {
             Minecraft.getMinecraft().setRenderViewEntity(this);
      		Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
             player.startRiding(this);
-//            
-//            original_player[3] = Minecraft.getMinecraft().gameSettings.fovSetting;
-//            original_player[0] = (float) player.posX;
-//            original_player[1] = (float) player.posY;
-//            original_player[2] = (float) player.posZ;
-//
-//            Minecraft.getMinecraft().gameSettings.fovSetting = fov;
          }
-
          return true;
     }
     
@@ -205,7 +182,7 @@ public class EntityDrone extends Entity {
 			order[3] = 3;
 		}
     	
-		GenericTransmitter t = FPVRacingMod.transmitter;
+		ControllerTaranis t = FPVRacingMod.transmitter;
 		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
