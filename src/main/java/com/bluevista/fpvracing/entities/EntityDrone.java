@@ -47,7 +47,7 @@ public class EntityDrone extends Entity {
         this.terminalVelocity = 1.5;
         
         this.channel = 0; // r band of course :)
-    	this.camera_angle = 15; // degrees
+    	this.camera_angle = 0; // degrees
     	this.fov = 100;
     	
         this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);    
@@ -61,11 +61,11 @@ public class EntityDrone extends Entity {
 		this.updateInputs();
 						
 		// Common Stuff
-		//this.mountCheck();
+		this.mountCheck();
 		this.dismountCheck();				
 		this.control();
 		this.doPhysics();
-	
+		
 		this.orientation.normalise();
 		
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -90,10 +90,11 @@ public class EntityDrone extends Entity {
 		if(!this.world.isRemote) {
 			if(Minecraft.getMinecraft().getRenderViewEntity() == this) {
 				EntityPlayer player = Minecraft.getMinecraft().player;
-				player.startRiding(this);
+				
+				//player.startRiding(this);
 
-				Minecraft.getMinecraft().setRenderViewEntity(this);
-     			Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
+				//Minecraft.getMinecraft().setRenderViewEntity(this);
+     			//Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
 			}
 		}
 	}
@@ -186,7 +187,7 @@ public class EntityDrone extends Entity {
 		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
-		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 12;		   // throttle
+		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 15;		   // throttle
     }
 
     public Quaternion getOrientation() {

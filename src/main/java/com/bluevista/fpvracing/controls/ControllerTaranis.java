@@ -19,6 +19,11 @@ public class ControllerTaranis  implements IController {
 			e.printStackTrace();
 		}
 		
+		System.out.println("Controllers boi:");
+		for(int i = 0; i < Controllers.getControllerCount(); i++) {
+			System.out.println(Controllers.getController(i).getName());
+		}
+		
 		if(OSValidator.isWindows()) {
 			controller = Controllers.getController(5);
 		} else {
