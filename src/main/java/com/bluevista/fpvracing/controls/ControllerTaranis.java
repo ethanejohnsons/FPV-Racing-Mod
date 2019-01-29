@@ -25,7 +25,7 @@ public class ControllerTaranis  implements IController {
 		}
 		
 		if(OSValidator.isWindows()) {
-			controller = Controllers.getController(5);
+			controller = Controllers.getController(0);
 		} else {
 			controller = Controllers.getController(0);
 		}
