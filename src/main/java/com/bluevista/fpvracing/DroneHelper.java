@@ -3,7 +3,7 @@ package com.bluevista.fpvracing;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.bluevista.fpvracing.controls.ControllerTaranis;
+import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.entity.MoverType;
@@ -24,7 +24,7 @@ public class DroneHelper {
     public static void init() {        
     	camera_angle = 0; // degrees
     	
-        orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);
+        orientation = QuaternionHelper.rotateZ(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);
     }
     
     public static void update(EntityPlayer player) {
@@ -58,7 +58,7 @@ public class DroneHelper {
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(
 				QuaternionHelper.quatToMatrix(
 				QuaternionHelper.rotateX(orientation, (-90) - camera_angle)));
-		e.addVelocity(-d.getX() * throttle, d.getY() * throttle, -d.getZ() * throttle);
+		e.addVelocity(d.getX() * throttle, d.getY() * throttle, d.getZ() * throttle);
         e.move(MoverType.SELF, e.motionX, e.motionY, e.motionZ);
 	}
 		
@@ -102,7 +102,7 @@ public class DroneHelper {
 			order[3] = 3;
 		}
     	
-		ControllerTaranis t = FPVRacingMod.transmitter;
+		Transmitter t = FPVRacingMod.transmitter;
 		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll

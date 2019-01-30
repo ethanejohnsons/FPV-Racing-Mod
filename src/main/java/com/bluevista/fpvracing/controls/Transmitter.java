@@ -7,11 +7,11 @@ import org.lwjgl.input.Controllers;
 import com.bluevista.fpvracing.OSValidator;
 import com.bluevista.fpvracing.math.BetaflightHelper;
 
-public class ControllerTaranis  implements IController {
+public class Transmitter {
 	
 	private Controller controller;
 	
-	public ControllerTaranis() {
+	public Transmitter() {
 		try {
 			Controllers.create();
 			Controllers.poll();		
@@ -19,21 +19,16 @@ public class ControllerTaranis  implements IController {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Controllers boi:");
-		for(int i = 0; i < Controllers.getControllerCount(); i++) {
-			System.out.println(Controllers.getController(i).getName());
-		}
+		//if(OSValidator.isWindows()) {
+		//	controller = Controllers.getController(1);
+		//}
 		
-		if(OSValidator.isWindows()) {
-			controller = Controllers.getController(0);
-		} else {
-			controller = Controllers.getController(0);
-		}
+		controller = Controllers.getController(1); // hard coded : will fix later
 	}
 	
 	public float getRawAxis(int axis) {
 		if(OSValidator.isWindows()) {
-			return controller.getAxisValue(axis+4);
+			return controller.getAxisValue(axis+4); // + 4
 		} else {
 			return controller.getAxisValue(axis);
 		}
