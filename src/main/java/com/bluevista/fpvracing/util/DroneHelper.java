@@ -1,8 +1,9 @@
-package com.bluevista.fpvracing;
+package com.bluevista.fpvracing.util;
 
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 

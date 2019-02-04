@@ -6,6 +6,8 @@ import com.bluevista.fpvracing.entities.EntityDrone;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,5 +32,13 @@ public class CameraHandler {
 		} else {
 			GL11.glRotated(0, 1f, 1f, 1f);
 		}
+	}
+	
+	public static void setDroneCam(World world, Minecraft mc) {
+		EntityDrone drone = new EntityDrone(world);
+		world.spawnEntity(drone);
+		mc.setRenderViewEntity(drone);
+		mc.gameSettings.hideGUI = true;
+		//this.thirdPersonView = true;
 	}
 }

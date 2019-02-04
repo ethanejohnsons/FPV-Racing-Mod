@@ -6,9 +6,10 @@ import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.OSValidator;
 import com.bluevista.fpvracing.controls.Transmitter;
+import com.bluevista.fpvracing.handler.CameraHandler;
 import com.bluevista.fpvracing.math.QuaternionHelper;
+import com.bluevista.fpvracing.util.OSValidator;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -22,28 +23,26 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityDrone extends Entity {
+public class EntityDrone extends EntityPlayer {
     
     private Quaternion orientation;
     private double throttle;
     
     private int channel;
     private int camera_angle;
-    private int fov;
         
     private double axis[] = new double[4]; // input
                 
 	public EntityDrone(World worldIn) {
-		super(worldIn);
+		super(worldIn, null);
 	}
 
 	@Override
 	protected void entityInit() {
-		this.setSize(0.6F, 0.5625F);
+		this.setSize(1F, 0.25F);
                         
         this.channel = 0; // r band of course :)
     	this.camera_angle = 0; // degrees
-    	this.fov = 100;
     	    	
         this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);    
 	}
@@ -51,14 +50,18 @@ public class EntityDrone extends Entity {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
 		this.orientation.normalise();
+		
 		this.updateInputs();
 		this.control();
 		doPhysics(this);
+		
 //		if(this.isBeingRidden()) {
 //			Entity e = this.getControllingPassenger();
 //			this.setPosition(e.posX, e.posY, e.posZ);
 //		}
+		
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 	}
     
@@ -124,11 +127,8 @@ public class EntityDrone extends Entity {
 	
 	// Right Click on the entity
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-    	 if (!this.world.isRemote) {
-            Minecraft.getMinecraft().setRenderViewEntity(this);
-     		//Minecraft.getMinecraft().getRenderViewEntity().setPositionAndRotation(posX, posY, posZ, 0, 0);
-            player.startRiding(this);
-         }
+    	 if (!this.world.isRemote)
+            CameraHandler.setDroneCam(player.getEntityWorld(), Minecraft.getMinecraft());
          return true;
     }
     
@@ -207,17 +207,25 @@ public class EntityDrone extends Entity {
     }
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	public void readEntityFromNBT(NBTTagCompound compound) {
 		
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	public void writeEntityToNBT(NBTTagCompound compound) {
 		
 	}
-	
-	public static boolean isPlayerFlyingDrone() {
-		return Minecraft.getMinecraft().player.isRiding() && Minecraft.getMinecraft().player.getRidingEntity() instanceof EntityDrone;
+
+	@Override
+	public boolean isSpectator() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCreative() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 		    
 }

@@ -4,8 +4,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
 
-import com.bluevista.fpvracing.OSValidator;
 import com.bluevista.fpvracing.math.BetaflightHelper;
+import com.bluevista.fpvracing.util.OSValidator;
 
 public class Transmitter {
 	

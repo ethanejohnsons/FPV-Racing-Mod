@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing;
+package com.bluevista.fpvracing.util;
 
 public class OSValidator {
 
