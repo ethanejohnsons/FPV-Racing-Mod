@@ -23,7 +23,7 @@ public class Transmitter {
 		//	controller = Controllers.getController(1);
 		//}
 		
-		controller = Controllers.getController(1); // hard coded : will fix later
+		controller = Controllers.getController(8); // TODO
 	}
 	
 	public float getRawAxis(int axis) {

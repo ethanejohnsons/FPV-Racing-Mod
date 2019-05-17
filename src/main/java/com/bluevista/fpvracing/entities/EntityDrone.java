@@ -11,7 +11,6 @@ import com.bluevista.fpvracing.handler.CameraHandler;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 import com.bluevista.fpvracing.util.OSValidator;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
@@ -23,25 +22,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityDrone extends EntityPlayer {
+public class EntityDrone extends Entity {
     
     private Quaternion orientation;
     private double throttle;
+    private boolean wasMountedLast = false;
     
-    private int channel;
+    private World world;
+    
     private int camera_angle;
         
     private double axis[] = new double[4]; // input
-                
+    
 	public EntityDrone(World worldIn) {
-		super(worldIn, null);
+		super(worldIn);
+		this.world = worldIn;
 	}
 
 	@Override
 	protected void entityInit() {
 		this.setSize(1F, 0.25F);
                         
-        this.channel = 0; // r band of course :)
     	this.camera_angle = 0; // degrees
     	    	
         this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);    
@@ -52,67 +53,73 @@ public class EntityDrone extends EntityPlayer {
 		super.onUpdate();
 		
 		this.orientation.normalise();
-		
 		this.updateInputs();
 		this.control();
-		doPhysics(this);
+		this.doPhysics();
 		
-//		if(this.isBeingRidden()) {
-//			Entity e = this.getControllingPassenger();
-//			this.setPosition(e.posX, e.posY, e.posZ);
+//		if(!this.isBeingRidden() && wasMountedLast) {
+//			CameraHandler.returnView();
+//			wasMountedLast = false;
 //		}
 		
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 	}
     
-	public void doPhysics(EntityDrone e) {
-		if(e.motionY >= -1.5) // terminal velocity
-			e.motionY -= 0.06D; // Gravity
+	public void doPhysics() {
+		if(this.motionY >= -1.5) // terminal velocity
+			this.motionY -= 0.06D; // Gravity
 		
 		// Drag
-		if(e.onGround) {
-			e.motionX -= e.motionX*0.18;
-			e.motionZ -= e.motionZ*0.18;
+		if(this.onGround) {
+			this.motionX -= this.motionX*0.18;
+			this.motionZ -= this.motionZ*0.18;
 		} else { // in air
-			if(e.motionX > 0)
-				e.motionX -= 0.02D;
-			else if(e.motionX < 0)
-				e.motionX += 0.02D;
+			if(this.motionX > 0)
+				this.motionX -= 0.02D;
+			else if(this.motionX < 0)
+				this.motionX += 0.02D;
 
-			if(e.motionZ > 0)
-				e.motionZ -= 0.02D;
-			else if(e.motionZ < 0)
-				e.motionZ += 0.02D;
+			if(this.motionZ > 0)
+				this.motionZ -= 0.02D;
+			else if(this.motionZ < 0)
+				this.motionZ += 0.02D;
 			
 			//this.motionY -= 0.02D;
 		}
 
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(
 				QuaternionHelper.quatToMatrix(
-				QuaternionHelper.rotateX(e.getOrientation(), (-90) - 20)));
-		e.addVelocity(-d.getX() * e.getThrottle(), d.getY() * e.getThrottle(), -d.getZ() * e.getThrottle());
-        e.move(MoverType.SELF, e.motionX, e.motionY, e.motionZ);
+				QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
+		this.addVelocity(-d.getX() * this.getThrottle(), d.getY() * this.getThrottle(), -d.getZ() * this.getThrottle());
+		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 	}
 		
 	public void control() {
-
 		if(this.isBeingRidden()) {
 			this.changePitch((float) axis[0]);
 			this.changeYaw((float) axis[1]);
 			this.changeRoll((float) axis[2]);
 			this.setThrottle((float) axis[3]);
 		}
-		
 	}
 	
+	/*
+	 * Change pitch in degrees
+	 */
 	public void changePitch(float angle) {
 		orientation = QuaternionHelper.rotateX(orientation, angle);
 	}
 	
+	/*
+	 * Change roll in degrees
+	 */
 	public void changeRoll(float angle) {
 		orientation = QuaternionHelper.rotateZ(orientation, angle);
 	}
 	
+	/*
+	 * Change yaw in degrees
+	 */
 	public void changeYaw(float angle) {
 		orientation = QuaternionHelper.rotateY(orientation, angle);
 	}
@@ -121,15 +128,17 @@ public class EntityDrone extends EntityPlayer {
 		this.throttle = throttle;
 	}
 	
-	public int getChannel() {
-		return channel;
-	}
-	
-	// Right Click on the entity
+	/*
+	 * When the drone is right clicked by a player, the
+	 * setNewView method is called from CameraHandler in
+	 * order to attach a new ViewHandler to the drone and
+	 * the player.
+	 */
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-    	 if (!this.world.isRemote)
-            CameraHandler.setDroneCam(player.getEntityWorld(), Minecraft.getMinecraft());
-         return true;
+//    	CameraHandler.nextTarget = this;
+    	CameraHandler.setNewView(this.world, player, this);
+        player.startRiding(this);
+        return true;
     }
     
     @SideOnly(Side.CLIENT)
@@ -214,18 +223,6 @@ public class EntityDrone extends EntityPlayer {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		
-	}
-
-	@Override
-	public boolean isSpectator() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isCreative() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 		    
 }

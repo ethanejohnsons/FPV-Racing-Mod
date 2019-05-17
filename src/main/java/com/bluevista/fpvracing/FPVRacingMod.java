@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.entities.EntityDrone;
+import com.bluevista.fpvracing.entities.ViewHandler;
 import com.bluevista.fpvracing.handler.CameraHandler;
 import com.bluevista.fpvracing.handler.ModEventHandler;
 import com.bluevista.fpvracing.handler.PlayerHandler;
@@ -40,7 +41,8 @@ public class FPVRacingMod {
         
         transmitter = new Transmitter();
         
-        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"), EntityDrone.class, "drone", 0, this, 100, 1, true);
+//        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "viewhandler"), ViewHandler.class, "view", 0, this, 100, 1, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"), EntityDrone.class, "drone", 1, this, 100, 1, true);
     }
 
     @EventHandler

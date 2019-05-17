@@ -13,14 +13,21 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 @Mod.EventBusSubscriber(modid=FPVRacingMod.MODID)
 public class ModEventHandler {
 				
+	/*
+	 * When the player right clicks the ground or any block
+	 * with the drone item, a drone will spawn with a ViewHandler
+	 * attached to it.
+	 */
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event) {
 		if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemDrone) {
+			
 			EntityDrone drone = new EntityDrone(event.getWorld());
 			drone.setLocationAndAngles(event.getPos().getX(), event.getPos().getY()+1, event.getPos().getZ(), 0, 0);
-		    if (!event.getWorld().isRemote) {
-	            event.getWorld().spawnEntity(drone);
-	        }
+			
+		    if(!event.getWorld().isRemote) {
+		    	event.getWorld().spawnEntity(drone);
+		    }
 		}		
 	}
 	
