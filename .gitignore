@@ -1,22 +1,16 @@
-# eclipse
 bin
 *.launch
 .settings
 .metadata
 .classpath
 .project
-
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
-
-# gradle
+gradle
 build
-.gradle
-
-# other
+*.gradle
+gradlew
+gradlew.bat
+forge*
 eclipse
 run
+CREDITS.txt
+LICENSE*
