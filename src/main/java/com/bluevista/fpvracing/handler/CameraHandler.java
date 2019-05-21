@@ -8,9 +8,6 @@ import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -19,21 +16,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class CameraHandler {
 	
-//	public static Entity nextTarget;
+	private ViewHandler viewEntity;
+	private static Entity target;
 	
 	@SubscribeEvent
-	public static void onRenderHand(RenderHandEvent event) {
-		if(Minecraft.getMinecraft().getRenderViewEntity() instanceof ViewHandler)
-			event.setCanceled(true); // No more hand :)
-	}
-	
-	@SubscribeEvent
-	public static void tick(TickEvent.RenderTickEvent event) {
-//		if(nextTarget != null) {
-//			Minecraft mc = FMLClientHandler.instance().getClient();
-//			setNewView(mc.world, mc.player, nextTarget);
-//			nextTarget = null;
-//		}
+	public void onRenderHand(RenderHandEvent event) {
+		if(FMLClientHandler.instance().getClient().getRenderViewEntity() instanceof ViewHandler)
+			event.setCanceled(true); // no more hand
 	}
 	
 	/*
@@ -42,50 +31,56 @@ public class CameraHandler {
 	 * rotation code is used.
 	 */
 	@SubscribeEvent
-	public static void cameraUpdate(EntityViewRenderEvent.CameraSetup event) {		
+	public void cameraUpdate(EntityViewRenderEvent.CameraSetup event) {
 		if(event.getEntity() instanceof ViewHandler) {
 			if(((ViewHandler)event.getEntity()).getTarget() instanceof EntityDrone) {
 				EntityDrone drone = (EntityDrone)((ViewHandler)event.getEntity()).getTarget();
 				GL11.glMultMatrix(
-						QuaternionHelper.toBuffer(
-					    QuaternionHelper.quatToMatrix(
-					    		drone.getOrientation()))); // Applies to screen
+				   QuaternionHelper.toBuffer(
+				   QuaternionHelper.quatToMatrix(
+				      drone.getOrientation()))); // Applies to screen
 			}
 		} else {
 			GL11.glRotated(0, 1f, 1f, 1f);
 		}
 	}
 	
-	/*
-	 * Creates a new ViewHandler that is attached to the
-	 * given target entity. The player's view is then transferred
-	 * to the ViewHandler's.
-	 */
-	public static void setNewView(World world, EntityPlayer player, Entity target) {
-		ViewHandler view = new ViewHandler(world, target);
-		view.setLocationAndAngles(target.posX, target.posY, target.posZ, 0, 0);
-				
-    	world.spawnEntity(view);
-	    
-	    Minecraft.getMinecraft().setRenderViewEntity(view);
-	    Minecraft.getMinecraft().gameSettings.hideGUI = true;
+	@SubscribeEvent
+	public void tick(TickEvent.RenderTickEvent event) {
+		Minecraft mc = FMLClientHandler.instance().getClient();
+		if(target == null && viewEntity != null) {
+			System.out.println("Destroying ViewHandler..................................");
+		    mc.setRenderViewEntity(mc.player);
+			mc.gameSettings.hideGUI = false;
+			viewEntity.setDead();
+			viewEntity = null;
+		} else if(target != null && viewEntity == null) {
+			System.out.println("Creating ViewHandler....................................");
+			viewEntity = new ViewHandler(mc.world, target);
+			viewEntity.setLocationAndAngles(target.posX, target.posY, target.posZ, 0, 0);
+					
+			mc.world.spawnEntity(viewEntity);
+	    	
+	    	mc.setRenderViewEntity(viewEntity);
+		    mc.gameSettings.hideGUI = true;
+		    //mc.gameSettings.thirdPersonView = 0;
+		}
 	}
 	
-	/*
-	 * Returns the view back to the original player
-	 */
-	public static void returnView() {
-		Minecraft.getMinecraft().getRenderViewEntity().setDead();
-	    Minecraft.getMinecraft().setRenderViewEntity(Minecraft.getMinecraft().player);
-		Minecraft.getMinecraft().gameSettings.hideGUI = false;
+	public static void setTarget(Entity e) {
+		target = e;
 	}
 	
-	public static void spawnViewHandler(World world, ViewHandler view) {
-        int i = MathHelper.floor(view.posX / 16.0D);
-        int j = MathHelper.floor(view.posZ / 16.0D);
-
-        world.getChunkFromChunkCoords(i, j).addEntity(view);
-        world.loadedEntityList.add(view);
-        world.onEntityAdded(view);
-    }
+	public static Entity getTarget() {
+		return target;
+	}
+	
+//	public static void spawnViewHandler(World world, ViewHandler view) {
+//        int i = MathHelper.floor(view.posX / 16.0D);
+//        int j = MathHelper.floor(view.posZ / 16.0D);
+//
+//        world.getChunkFromChunkCoords(i, j).addEntity(view);
+//        world.loadedEntityList.add(view);
+//        world.onEntityAdded(view);
+//    }
 }

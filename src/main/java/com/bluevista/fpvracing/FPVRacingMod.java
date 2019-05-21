@@ -26,23 +26,22 @@ public class FPVRacingMod {
     public static final String MODID = "fpvracing";
     public static final String NAME = "FPV Racing Mod";
     public static final String VERSION = "1.0";
-            
+                
     public static Transmitter transmitter;
     
-    public static KeyBinding drone_toggle;
+    public static KeyBinding unmount;
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(ModEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(CameraHandler.class);
+        MinecraftForge.EVENT_BUS.register(new CameraHandler());
         MinecraftForge.EVENT_BUS.register(PlayerHandler.class);
         MinecraftForge.EVENT_BUS.register(RegistrationHandler.class);
         initKeybinds();
-        
+                
         transmitter = new Transmitter();
         
-//        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "viewhandler"), ViewHandler.class, "view", 0, this, 100, 1, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"), EntityDrone.class, "drone", 1, this, 100, 1, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"), EntityDrone.class, "drone", 1, this, 200, 1, false);
     }
 
     @EventHandler
@@ -50,15 +49,11 @@ public class FPVRacingMod {
     	
     	System.out.println("Controllers: ");
 		for(int i = 0; i < Controllers.getControllerCount(); i++)
-			System.out.println(Controllers.getController(i).getName() + ", " + Controllers.getController(i).getAxisCount());
-		
-		//DroneHelper.init();
-		
+			System.out.println(Controllers.getController(i).getName() + ", " + Controllers.getController(i).getAxisCount());		
     }
     
     public void initKeybinds() {
-    	drone_toggle = new KeyBinding("key.drone_toggle.desc", Keyboard.KEY_P, "key.drone.category");
-    	
-        ClientRegistry.registerKeyBinding(drone_toggle);
+    	unmount = new KeyBinding("key.unmount.desc", Keyboard.KEY_LSHIFT, "key.drone.category");
+        ClientRegistry.registerKeyBinding(unmount);
     }
 }

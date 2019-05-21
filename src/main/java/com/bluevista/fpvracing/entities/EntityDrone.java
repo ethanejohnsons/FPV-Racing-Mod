@@ -24,12 +24,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityDrone extends Entity {
     
+    private static EntityPlayer playerUsing;
+    private static EntityDrone droneBeingUsed;
+	
     private Quaternion orientation;
     private double throttle;
-    private boolean wasMountedLast = false;
     
-    private World world;
-    
+        
     private int camera_angle;
         
     private double axis[] = new double[4]; // input
@@ -52,16 +53,14 @@ public class EntityDrone extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 		
+		if(isPlayerUsing(this)) {
+			updateInputs();
+			control();
+		}
+		
 		this.orientation.normalise();
-		this.updateInputs();
-		this.control();
-		this.doPhysics();
-		
-//		if(!this.isBeingRidden() && wasMountedLast) {
-//			CameraHandler.returnView();
-//			wasMountedLast = false;
-//		}
-		
+		doPhysics();
+				
         this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 	}
     
@@ -95,12 +94,10 @@ public class EntityDrone extends Entity {
 	}
 		
 	public void control() {
-		if(this.isBeingRidden()) {
-			this.changePitch((float) axis[0]);
-			this.changeYaw((float) axis[1]);
-			this.changeRoll((float) axis[2]);
-			this.setThrottle((float) axis[3]);
-		}
+		this.changePitch((float) axis[0]);
+		this.changeYaw((float) axis[1]);
+		this.changeRoll((float) axis[2]);
+		this.setThrottle((float) axis[3]);
 	}
 	
 	/*
@@ -129,15 +126,11 @@ public class EntityDrone extends Entity {
 	}
 	
 	/*
-	 * When the drone is right clicked by a player, the
-	 * setNewView method is called from CameraHandler in
-	 * order to attach a new ViewHandler to the drone and
-	 * the player.
+	 * TODO description
 	 */
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-//    	CameraHandler.nextTarget = this;
-    	CameraHandler.setNewView(this.world, player, this);
-        player.startRiding(this);
+    	CameraHandler.setTarget(this);
+        setPlayerUsing(player, this);
         return true;
     }
     
@@ -161,6 +154,21 @@ public class EntityDrone extends Entity {
 		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
 		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 15;		   // throttle
+    }
+    
+    public static void setPlayerUsing(EntityPlayer p, EntityDrone d) {
+    	playerUsing = p;
+    	droneBeingUsed = d;
+    }
+    
+    public static boolean isPlayerUsing(EntityDrone d) {
+    	return playerUsing != null && droneBeingUsed.equals(d);
+    }
+    
+    public static void stopUsing() {
+    	playerUsing = null;
+    	droneBeingUsed = null;
+		CameraHandler.setTarget(null);
     }
 
     public Quaternion getOrientation() {
@@ -209,11 +217,11 @@ public class EntityDrone extends Entity {
         return !this.isDead;
     }
 
-    @Override
-    public void updatePassenger(Entity passenger)
-    {
-        //passenger.setPosition(this.posX, this.posY, this.posZ);
-    }
+//    @Override
+//    public void updatePassenger(Entity passenger)
+//    {
+//        passenger.setPosition(this.posX, this.posY, this.posZ);
+//    }
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {

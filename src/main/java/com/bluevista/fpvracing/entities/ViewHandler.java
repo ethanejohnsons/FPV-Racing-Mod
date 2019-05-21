@@ -12,18 +12,18 @@ public class ViewHandler extends EntityPlayer {
 	
 	public ViewHandler(World worldIn, Minecraft mc) {
 		super(worldIn, mc.player.getGameProfile());
+		this.noClip = true;
+		setSize(0.0F, 0.0F);
 	}
 	
 	public ViewHandler(World worldIn, Entity target) {
 		this(worldIn, FMLClientHandler.instance().getClient());
 		this.target = target;
-		this.noClip = true;
-		this.setSize(0, 0);
 	}
 	
     public void onUpdate() {
     	super.onUpdate();
-    	this.setPosition(target.posX, target.posY-1, target.posZ);
+    	if(target != null) setPosition(target.posX, target.posY-1, this.posZ + 0.5);
     }
     
     public Entity getTarget() {
