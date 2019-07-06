@@ -1,7 +1,7 @@
 package com.bluevista.fpvracing.controls;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Controller;
+import org.lwjgl.glfw.Controller;
 import org.lwjgl.input.Controllers;
 
 import com.bluevista.fpvracing.math.BetaflightHelper;

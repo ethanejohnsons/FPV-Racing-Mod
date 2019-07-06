@@ -5,8 +5,8 @@ import com.bluevista.fpvracing.items.ItemDrone;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid=FPVRacingMod.MODID)
 public class RegistrationHandler {

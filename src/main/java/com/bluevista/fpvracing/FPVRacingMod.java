@@ -3,7 +3,7 @@ package com.bluevista.fpvracing;
 import org.lwjgl.input.Controllers;
 import org.lwjgl.input.Keyboard;
 
-import com.bluevista.fpvracing.controls.Transmitter;
+//import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.entities.EntityDrone;
 import com.bluevista.fpvracing.entities.ViewHandler;
 import com.bluevista.fpvracing.handler.CameraHandler;

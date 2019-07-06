@@ -149,7 +149,7 @@ public class EntityDrone extends Entity {
 			order[3] = 3;
 		}
     	
-		Transmitter t = FPVRacingMod.transmitter;
+//		Transmitter t = FPVRacingMod.transmitter;
 		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll

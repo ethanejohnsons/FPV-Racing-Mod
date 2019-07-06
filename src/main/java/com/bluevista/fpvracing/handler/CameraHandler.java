@@ -1,5 +1,6 @@
 package com.bluevista.fpvracing.handler;
 
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import com.bluevista.fpvracing.entities.EntityDrone;
@@ -10,8 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class CameraHandler {
@@ -21,7 +20,7 @@ public class CameraHandler {
 	
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
-		if(FMLClientHandler.instance().getClient().getRenderViewEntity() instanceof ViewHandler)
+		if(Minecraft.getInstance().getRenderViewEntity() instanceof ViewHandler)
 			event.setCanceled(true); // no more hand
 	}
 	
@@ -32,10 +31,11 @@ public class CameraHandler {
 	 */
 	@SubscribeEvent
 	public void cameraUpdate(EntityViewRenderEvent.CameraSetup event) {
-		if(event.getEntity() instanceof ViewHandler) {
-			if(((ViewHandler)event.getEntity()).getTarget() instanceof EntityDrone) {
-				EntityDrone drone = (EntityDrone)((ViewHandler)event.getEntity()).getTarget();
-				GL11.glMultMatrix(
+		Entity currentViewEntity = Minecraft.getInstance().getRenderViewEntity();
+		if(currentViewEntity instanceof ViewHandler) {
+			if( ((ViewHandler)currentViewEntity).getTarget() instanceof EntityDrone ) {
+				EntityDrone drone = (EntityDrone)((ViewHandler)currentViewEntity).getTarget();
+				GL11.glMultMatrixf(
 				   QuaternionHelper.toBuffer(
 				   QuaternionHelper.quatToMatrix(
 				      drone.getOrientation()))); // Applies to screen
@@ -47,19 +47,18 @@ public class CameraHandler {
 	
 	@SubscribeEvent
 	public void tick(TickEvent.RenderTickEvent event) {
-		Minecraft mc = FMLClientHandler.instance().getClient();
+		Minecraft mc = Minecraft.getInstance();
 		if(target == null && viewEntity != null) {
 			System.out.println("Destroying ViewHandler..................................");
 		    mc.setRenderViewEntity(mc.player);
 			mc.gameSettings.hideGUI = false;
-			viewEntity.setDead();
 			viewEntity = null;
 		} else if(target != null && viewEntity == null) {
 			System.out.println("Creating ViewHandler....................................");
 			viewEntity = new ViewHandler(mc.world, target);
 			viewEntity.setLocationAndAngles(target.posX, target.posY, target.posZ, 0, 0);
 					
-			mc.world.spawnEntity(viewEntity);
+			mc.world.addEntity(viewEntity);
 	    	
 	    	mc.setRenderViewEntity(viewEntity);
 		    mc.gameSettings.hideGUI = true;

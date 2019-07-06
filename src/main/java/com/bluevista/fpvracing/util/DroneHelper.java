@@ -1,16 +1,14 @@
 package com.bluevista.fpvracing.util;
 
-import org.lwjgl.util.vector.Quaternion;
-import org.lwjgl.util.vector.Vector3f;
+import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class DroneHelper {
 	
@@ -24,17 +22,16 @@ public class DroneHelper {
 	
     public static void init() {        
     	camera_angle = 0; // degrees
-    	
         orientation = QuaternionHelper.rotateZ(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), camera_angle);
     }
     
-    public static void update(EntityPlayer player) {
+    public static void update(PlayerEntity player) {
 		updateInputs();
 		control();
 		doPhysics(player);
     }
     
-	public static void doPhysics(EntityPlayer e) {
+	public static void doPhysics(PlayerEntity e) {
 		if(e.motionY >= -1.5) // terminal velocity
 			e.motionY -= 0.06D; // Gravity
 		
@@ -88,7 +85,7 @@ public class DroneHelper {
 		throttle = t;
 	}
 	
-	@SideOnly(Side.CLIENT)
+//	@SideOnly(Side.CLIENT)
     public static void updateInputs() {
     	int[] order = new int[4];
 		if(OSValidator.isMac()) {
@@ -103,7 +100,7 @@ public class DroneHelper {
 			order[3] = 3;
 		}
     	
-		Transmitter t = FPVRacingMod.transmitter;
+//		Transmitter t = FPVRacingMod.transmitter;
 		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
