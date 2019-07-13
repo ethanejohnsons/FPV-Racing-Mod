@@ -1,6 +1,7 @@
 package com.bluevista.fpvracing.items;
 
 import com.bluevista.fpvracing.entities.DroneEntity;
+import com.bluevista.fpvracing.registry.EntityRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;

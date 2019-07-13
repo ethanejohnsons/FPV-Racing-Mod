@@ -15,14 +15,14 @@ public class ClickEvents {
      * with the drone item, a drone will spawn with a ViewHandler
      * attached to it.
      */
-    @SubscribeEvent
-    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemDrone && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
-            DroneEntity drone = new DroneEntity(event.getWorld());
-            drone.setLocationAndAngles(event.getPos().getX(), event.getPos().getY()+1, event.getPos().getZ(), 0, 0);
-            event.getWorld().addEntity(drone);
-        }
-    }
+//    @SubscribeEvent
+//    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+//        if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemDrone && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
+//            DroneEntity drone = new DroneEntity(event.getWorld());
+//            drone.setLocationAndAngles(event.getPos().getX(), event.getPos().getY()+1, event.getPos().getZ(), 0, 0);
+//            event.getWorld().addEntity(drone);
+//        }
+//    }
 
 //	@SubscribeEvent
 //	public static void onRightClick(RightClickItem event) {

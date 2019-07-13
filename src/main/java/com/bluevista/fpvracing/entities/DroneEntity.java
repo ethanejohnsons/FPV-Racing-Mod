@@ -3,6 +3,7 @@ package com.bluevista.fpvracing.entities;
 //import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.events.CameraEvents;
 import com.bluevista.fpvracing.math.QuaternionHelper;
+import com.bluevista.fpvracing.registry.EntityRegistry;
 import com.bluevista.fpvracing.util.OSValidator;
 
 import net.minecraft.entity.Entity;
@@ -16,6 +17,7 @@ import net.minecraft.network.IPacket;
 		import net.minecraft.world.World;
 
 import net.minecraft.client.renderer.Quaternion;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class DroneEntity extends Entity {
 
@@ -27,10 +29,13 @@ public class DroneEntity extends Entity {
     private double throttle;
     private double axis[] = new double[4]; // input
     
-	public DroneEntity(World worldIn) {
-		super(EntityType.CAVE_SPIDER, worldIn); // whatevs
+	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
+		super(entityTypeIn, worldIn);
 		// TODO nbt tags - channel, camera_angle, etc.
+	}
 
+	public DroneEntity(World worldIn) {
+		this(EntityRegistry.drone, worldIn);
 		this.world = worldIn;
 		this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
 	}
@@ -202,8 +207,10 @@ public class DroneEntity extends Entity {
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket() {
-		return null;
+	public IPacket<?> createSpawnPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
-		    
+
+
 }
