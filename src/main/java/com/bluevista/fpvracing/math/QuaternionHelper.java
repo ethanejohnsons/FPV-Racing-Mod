@@ -14,9 +14,9 @@ public class QuaternionHelper {
 	public static AxisAngle4f toAxisAngle(Quaternion quat, AxisAngle4f angle) {
 		float divisor = (float) Math.sqrt(1 - quat.getW() * quat.getW());
 		angle.setAngle((float) (2 * Math.acos(quat.getW())));
-		angle.setX((float) (quat.getX() / divisor));
-		angle.setY((float) (quat.getY() / divisor));
-		angle.setZ((float) (quat.getZ() / divisor));
+		angle.setX((quat.getX() / divisor));
+		angle.setY((quat.getY() / divisor));
+		angle.setZ((quat.getZ() / divisor));
 		
 		return angle;
 	}

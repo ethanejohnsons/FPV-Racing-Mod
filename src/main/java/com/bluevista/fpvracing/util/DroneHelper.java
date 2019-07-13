@@ -3,8 +3,8 @@ package com.bluevista.fpvracing.util;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 
-import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.controls.Transmitter;
+//import com.bluevista.fpvracing.FPVRacingMod;
+//import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
 import net.minecraft.entity.MoverType;
@@ -32,32 +32,35 @@ public class DroneHelper {
     }
     
 	public static void doPhysics(PlayerEntity e) {
-		if(e.motionY >= -1.5) // terminal velocity
-			e.motionY -= 0.06D; // Gravity
-		
-		// Drag
-		if(e.onGround) {
-			e.motionX -= e.motionX*0.18;
-			e.motionZ -= e.motionZ*0.18;
-		} else { // in air
-			if(e.motionX > 0)
-				e.motionX -= 0.02D;
-			else if(e.motionX < 0)
-				e.motionX += 0.02D;
+//		if(e.getMotion().getY() >= -1.5) // terminal velocity
+//			e.setMotion() -= 0.06D; // Gravity
+			// TODO do gravity
 
-			if(e.motionZ > 0)
-				e.motionZ -= 0.02D;
-			else if(e.motionZ < 0)
-				e.motionZ += 0.02D;
+		// Drag
+//		if(e.onGround) {
+//			e.setMotion() -= e.motionX*0.18;
+//			e.motionZ -= e.motionZ*0.18;
+//		} else { // in air
+//			if(e.motionX > 0)
+//				e.motionX -= 0.02D;
+//			else if(e.motionX < 0)
+//				e.motionX += 0.02D;
+//
+//			if(e.motionZ > 0)
+//				e.motionZ -= 0.02D;
+//			else if(e.motionZ < 0)
+//				e.motionZ += 0.02D;
 			
 			//this.motionY -= 0.02D;
-		}
+			// TODO all physics
+//		}
 
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(
 				QuaternionHelper.quatToMatrix(
 				QuaternionHelper.rotateX(orientation, (-90) - camera_angle)));
-		e.addVelocity(d.getX() * throttle, d.getY() * throttle, d.getZ() * throttle);
-        e.move(MoverType.SELF, e.motionX, e.motionY, e.motionZ);
+
+		e.setVelocity(d.getX() * throttle, d.getY() * throttle, d.getZ() * throttle);
+        e.move(MoverType.SELF, e.getMotion());
 	}
 		
 	public static void control() {
@@ -101,9 +104,9 @@ public class DroneHelper {
 		}
     	
 //		Transmitter t = FPVRacingMod.transmitter;
-		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
-		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
-		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
-		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 15;		   // throttle
+//		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
+//		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
+//		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
+//		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 15;		   // throttle
     }
 }

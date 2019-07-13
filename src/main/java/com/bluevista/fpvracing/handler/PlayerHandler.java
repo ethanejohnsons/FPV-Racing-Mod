@@ -1,22 +1,22 @@
 package com.bluevista.fpvracing.handler;
 
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+//import net.minecraftforge.client.event.MouseEvent;
+//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class PlayerHandler {
 			
-	@SubscribeEvent
-	public static void onPlayerTick(PlayerTickEvent event) {
+//	@SubscribeEvent
+//	public static void onPlayerTick(PlayerTickEvent event) {
 //		if(DroneHelper.isPlayerDrone) {
 //			DroneHelper.update(event.player);
 //		} else {
 //			event.player.setNoGravity(false);
 //		}
-	}
-	
-	@SubscribeEvent
-	public static void mouseEvent(MouseEvent event) {
+//	}
+//
+//	@SubscribeEvent
+//	public static void mouseEvent(MouseEvent event) {
 //		
 //		// Prevents mouse movement while the player is a drone
 //		if(DroneHelper.isPlayerDrone) {
@@ -24,7 +24,7 @@ public class PlayerHandler {
 ////			Minecraft.getMinecraft().player.rotationYaw = 0;
 //			System.out.println("canceling");
 //		}
-		
-	}
-	
+//
+//	}
+
 }
