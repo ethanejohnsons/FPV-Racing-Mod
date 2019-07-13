@@ -32,12 +32,13 @@ import org.apache.logging.log4j.Logger;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("fpvracingmod")
+@Mod(FPVRacingMod.MODID)
 public class FPVRacingMod {
 
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
+    public static final String MODID = "fpvracingmod";
     public static KeyBinding unmount;
 
     public FPVRacingMod() {

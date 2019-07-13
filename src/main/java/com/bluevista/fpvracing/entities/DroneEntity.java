@@ -144,11 +144,11 @@ public class DroneEntity extends Entity {
     	return playerUsing != null && droneBeingUsed.equals(d);
     }
     
-//    public static void stopUsing() {
-//    	playerUsing = null;
-//    	droneBeingUsed = null;
-//		CameraHandler.setTarget(null);
-//    }
+    public static void stopUsing() {
+    	playerUsing = null;
+    	droneBeingUsed = null;
+		CameraHandler.setTarget(null);
+    }
 
     public Quaternion getOrientation() {
     	return orientation;

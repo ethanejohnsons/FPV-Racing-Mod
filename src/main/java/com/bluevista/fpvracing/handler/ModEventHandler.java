@@ -1,7 +1,7 @@
 package com.bluevista.fpvracing.handler;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.entities.EntityDrone;
+import com.bluevista.fpvracing.entities.DroneEntity;
 import com.bluevista.fpvracing.items.ItemDrone;
 
 import net.minecraftforge.client.event.InputEvent;
@@ -21,7 +21,7 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public static void onRightClickBlock(RightClickBlock event) {
 		if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemDrone && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
-			EntityDrone drone = new EntityDrone(event.getWorld());
+			DroneEntity drone = new DroneEntity(event.getWorld());
 			drone.setLocationAndAngles(event.getPos().getX(), event.getPos().getY()+1, event.getPos().getZ(), 0, 0);
 	    	event.getWorld().addEntity(drone);
 		}
@@ -40,7 +40,7 @@ public class ModEventHandler {
 	@SubscribeEvent
 	public static void onKeyInput(InputEvent.KeyInputEvent event) {
 		if(FPVRacingMod.unmount.isPressed()) { // the get off button
-			EntityDrone.stopUsing();
+			DroneEntity.stopUsing();
 		}
 //		if(FPVRacingMod.drone_toggle.isPressed()) {
 //			DroneHelper.isPlayerDrone = !DroneHelper.isPlayerDrone;

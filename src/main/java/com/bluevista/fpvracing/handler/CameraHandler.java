@@ -3,7 +3,7 @@ package com.bluevista.fpvracing.handler;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
-import com.bluevista.fpvracing.entities.EntityDrone;
+import com.bluevista.fpvracing.entities.DroneEntity;
 import com.bluevista.fpvracing.entities.ViewHandler;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 
@@ -33,8 +33,8 @@ public class CameraHandler {
 	public void cameraUpdate(EntityViewRenderEvent.CameraSetup event) {
 		Entity currentViewEntity = Minecraft.getInstance().getRenderViewEntity();
 		if(currentViewEntity instanceof ViewHandler) {
-			if( ((ViewHandler)currentViewEntity).getTarget() instanceof EntityDrone ) {
-				EntityDrone drone = (EntityDrone)((ViewHandler)currentViewEntity).getTarget();
+			if( ((ViewHandler)currentViewEntity).getTarget() instanceof DroneEntity) {
+				DroneEntity drone = (DroneEntity)((ViewHandler)currentViewEntity).getTarget();
 				GL11.glMultMatrixf(
 				   QuaternionHelper.toBuffer(
 				   QuaternionHelper.quatToMatrix(
