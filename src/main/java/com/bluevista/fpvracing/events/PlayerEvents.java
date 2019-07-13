@@ -1,10 +1,10 @@
-package com.bluevista.fpvracing.handler;
+package com.bluevista.fpvracing.events;
 
 //import net.minecraftforge.client.event.MouseEvent;
-//import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.Mod;
 
-public class PlayerHandler {
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+public class PlayerEvents {
 			
 //	@SubscribeEvent
 //	public static void onPlayerTick(PlayerTickEvent event) {

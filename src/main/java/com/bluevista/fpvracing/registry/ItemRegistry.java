@@ -1,15 +1,15 @@
-package com.bluevista.fpvracing.handler;
-
-import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.items.ItemDrone;
+package com.bluevista.fpvracing.registry;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid=FPVRacingMod.MODID)
-public class RegistrationHandler {
+import com.bluevista.fpvracing.items.ItemDrone;
+
+
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+public class ItemRegistry {
 	
     public static final ItemDrone DRONE_SPAWNER = new ItemDrone();
 //    public static final ItemGoggles DRONE_GOGGLES = new ItemGoggles();

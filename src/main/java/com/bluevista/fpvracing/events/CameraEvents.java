@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-public class CameraHandler {
+public class CameraEvents {
 	
 	private static ViewHandler viewEntity;
 	private static Entity target;

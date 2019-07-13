@@ -1,27 +1,21 @@
 package com.bluevista.fpvracing.entities;
 
-import javax.annotation.Nullable;
-
-import com.bluevista.fpvracing.FPVRacingMod;
 //import com.bluevista.fpvracing.controls.Transmitter;
-import com.bluevista.fpvracing.handler.CameraHandler;
+import com.bluevista.fpvracing.events.CameraEvents;
 import com.bluevista.fpvracing.math.QuaternionHelper;
 import com.bluevista.fpvracing.util.OSValidator;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
+		import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.nbt.NBTTagCompound;
 //import net.minecraft.util.EnumHand;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+		import net.minecraft.world.World;
 
 import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 
 public class DroneEntity extends Entity {
 
@@ -108,7 +102,7 @@ public class DroneEntity extends Entity {
 	}
 	
 //    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
-//    	CameraHandler.setTarget(this);
+//    	CameraEvents.setTarget(this);
 //        setPlayerUsing(player, this);
 //        return true;
 //    }
@@ -147,7 +141,7 @@ public class DroneEntity extends Entity {
     public static void stopUsing() {
     	playerUsing = null;
     	droneBeingUsed = null;
-		CameraHandler.setTarget(null);
+		CameraEvents.setTarget(null);
     }
 
     public Quaternion getOrientation() {
