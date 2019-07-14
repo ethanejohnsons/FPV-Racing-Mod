@@ -1,9 +1,10 @@
 package com.bluevista.fpvracing.events;
 
 //import net.minecraftforge.client.event.MouseEvent;
+import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = FPVRacingMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PlayerEvents {
 			
 //	@SubscribeEvent

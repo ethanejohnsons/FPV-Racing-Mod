@@ -1,20 +1,22 @@
 package com.bluevista.fpvracing.events;
 
+import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.opengl.GL11;
-
-import com.bluevista.fpvracing.entities.DroneEntity;
-import com.bluevista.fpvracing.entities.ViewHandler;
-import com.bluevista.fpvracing.math.QuaternionHelper;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+import com.bluevista.fpvracing.entities.DroneEntity;
+import com.bluevista.fpvracing.entities.ViewHandler;
+import net.minecraft.entity.Entity;
+
+import com.bluevista.fpvracing.math.QuaternionHelper;
+import org.lwjgl.opengl.GL11;
+
+
+@Mod.EventBusSubscriber(modid = FPVRacingMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CameraEvents {
 	
 	private static ViewHandler viewEntity;
@@ -32,7 +34,7 @@ public class CameraEvents {
 	 * rotation code is used.
 	 */
 	@SubscribeEvent
-	public static void cameraUpdate(EntityViewRenderEvent.CameraSetup event) {
+	public static void cameraUpdate(EntityViewRenderEvent.CameraSetup event) { // TODO make separate funcitnon to find out if player is using drone
 		Entity currentViewEntity = Minecraft.getInstance().getRenderViewEntity();
 		if(currentViewEntity instanceof ViewHandler) {
 			if( ((ViewHandler)currentViewEntity).getTarget() instanceof DroneEntity) {
@@ -47,26 +49,26 @@ public class CameraEvents {
 		}
 	}
 	
-	@SubscribeEvent
-	public static void tick(TickEvent.RenderTickEvent event) {
-		Minecraft mc = Minecraft.getInstance();
-		if(target == null && viewEntity != null) {
-			System.out.println("Destroying ViewHandler..................................");
-		    mc.setRenderViewEntity(mc.player);
-			mc.gameSettings.hideGUI = false;
-			viewEntity = null;
-		} else if(target != null && viewEntity == null) {
-			System.out.println("Creating ViewHandler....................................");
-			viewEntity = new ViewHandler(mc.world, target);
-			viewEntity.setLocationAndAngles(target.posX, target.posY, target.posZ, 0, 0);
-					
-			mc.world.addEntity(viewEntity);
-	    	
-	    	mc.setRenderViewEntity(viewEntity);
-		    mc.gameSettings.hideGUI = true;
-		    //mc.gameSettings.thirdPersonView = 0;
-		}
-	}
+//	@SubscribeEvent
+//	public static void tick(TickEvent.RenderTickEvent event) {
+//		Minecraft mc = Minecraft.getInstance();
+//		if(target == null && viewEntity != null) {
+//			System.out.println("Destroying ViewHandler..................................");
+//		    mc.setRenderViewEntity(mc.player);
+//			mc.gameSettings.hideGUI = false;
+//			viewEntity = null;
+//		} else if(target != null && viewEntity == null) {
+//			System.out.println("Creating ViewHandler....................................");
+//			viewEntity = new ViewHandler(mc.world, target);
+//			viewEntity.setLocationAndAngles(target.posX, target.posY, target.posZ, 0, 0);
+//
+//			mc.world.addEntity(viewEntity);
+//
+//	    	mc.setRenderViewEntity(viewEntity);
+//		    mc.gameSettings.hideGUI = true;
+//		    mc.gameSettings.thirdPersonView = 0;
+//		}
+//	}
 	
 	public static void setTarget(Entity e) {
 		target = e;

@@ -1,9 +1,10 @@
 package com.bluevista.fpvracing.events;
 
+import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-public class ClickEvents {
+@Mod.EventBusSubscriber(modid = FPVRacingMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class InputEvents {
 
     /*
      * When the player right clicks the ground or any block
@@ -23,6 +24,18 @@ public class ClickEvents {
 //	public static void onRightClick(RightClickItem event) {
 //		if(event.getItemStack().getItem() instanceof ItemGoggles) {
 //
+//		}
+//	}
+
+// 	@SubscribeEvent
+//	public static void onKeyInput(InputEvent.KeyInputEvent event) {
+//		if(FPVRacingMod.unmount.isPressed()) { // the get off button
+//			DroneEntity.stopUsing();
+//		}
+//		if(FPVRacingMod.drone_toggle.isPressed()) {
+//			DroneHelper.isPlayerDrone = !DroneHelper.isPlayerDrone;
+//			DroneHelper.init();
+//			Minecraft.getMinecraft().player.setNoGravity(!Minecraft.getMinecraft().player.hasNoGravity());
 //		}
 //	}
 

@@ -32,7 +32,7 @@ public class FPVRacingMod {
 //    public static KeyBinding unmount;
 
     public FPVRacingMod() {
-
+        System.out.println("Running boi...");
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -42,8 +42,6 @@ public class FPVRacingMod {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
 
-//        EntityRegistry.registerModEntity(new ResourceLocation(FPVRacingMod.MODID, "entitydrone"),
-//                DroneEntity.class, "drone", 1, this, 200, 1, false);
         //unmount = new KeyBinding("key.unmount.desc", Keyboard.KEY_LSHIFT, "key.drone.category");
         //ClientRegistry.registerKeyBinding(unmount);
 
@@ -51,12 +49,9 @@ public class FPVRacingMod {
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(CameraEvents.class);
-//        MinecraftForge.EVENT_BUS.register(ClickEvents.class);
-        MinecraftForge.EVENT_BUS.register(KeyEvents.class);
+        MinecraftForge.EVENT_BUS.register(InputEvents.class);
         MinecraftForge.EVENT_BUS.register(PlayerEvents.class);
 
-        LOGGER.debug("Registering stufff...");
-        System.out.println("Registering stuffff...");
         MinecraftForge.EVENT_BUS.register(ItemRegistry.class);
         MinecraftForge.EVENT_BUS.register(BlockRegistry.class);
         MinecraftForge.EVENT_BUS.register(EntityRegistry.class);
