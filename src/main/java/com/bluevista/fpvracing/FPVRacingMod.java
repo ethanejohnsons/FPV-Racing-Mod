@@ -32,7 +32,7 @@ public class FPVRacingMod {
 //    public static KeyBinding unmount;
 
     public FPVRacingMod() {
-        System.out.println("Running boi...");
+
     }
 
     private void setup(final FMLCommonSetupEvent event)

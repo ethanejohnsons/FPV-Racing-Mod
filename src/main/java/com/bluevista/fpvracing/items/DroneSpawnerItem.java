@@ -8,11 +8,10 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class DroneItem extends Item {
+public class DroneSpawnerItem extends Item {
 
-	public DroneItem() {
+	public DroneSpawnerItem() {
 		super(new Item.Properties());
-		this.setRegistryName("drone");
 	}
 
 	/**
