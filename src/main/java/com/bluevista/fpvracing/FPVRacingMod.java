@@ -47,14 +47,6 @@ public class FPVRacingMod {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-
-        MinecraftForge.EVENT_BUS.register(CameraEvents.class);
-        MinecraftForge.EVENT_BUS.register(InputEvents.class);
-        MinecraftForge.EVENT_BUS.register(PlayerEvents.class);
-
-        MinecraftForge.EVENT_BUS.register(ItemRegistry.class);
-        MinecraftForge.EVENT_BUS.register(BlockRegistry.class);
-        MinecraftForge.EVENT_BUS.register(EntityRegistry.class);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
