@@ -1,7 +1,6 @@
-package com.bluevista.fpvracing.registry;
+package com.bluevista.fpvracing.entities;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.entities.DroneEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;

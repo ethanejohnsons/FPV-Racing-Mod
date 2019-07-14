@@ -2,11 +2,6 @@ package com.bluevista.fpvracing;
 
 //import org.lwjgl.input.Keyboard;
 
-import com.bluevista.fpvracing.events.*;
-
-import com.bluevista.fpvracing.registry.BlockRegistry;
-import com.bluevista.fpvracing.registry.EntityRegistry;
-import com.bluevista.fpvracing.registry.ItemRegistry;
 //import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.InterModComms;

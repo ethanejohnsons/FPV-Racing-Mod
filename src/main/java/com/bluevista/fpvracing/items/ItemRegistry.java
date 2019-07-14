@@ -1,15 +1,12 @@
-package com.bluevista.fpvracing.registry;
+package com.bluevista.fpvracing.items;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.items.GogglesItem;
-import com.bluevista.fpvracing.items.TransmitterItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.bluevista.fpvracing.items.DroneSpawnerItem;
 import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

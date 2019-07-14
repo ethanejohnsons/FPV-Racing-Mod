@@ -3,7 +3,6 @@ package com.bluevista.fpvracing.entities;
 //import com.bluevista.fpvracing.controls.Transmitter;
 import com.bluevista.fpvracing.events.CameraEvents;
 import com.bluevista.fpvracing.math.QuaternionHelper;
-import com.bluevista.fpvracing.registry.EntityRegistry;
 import com.bluevista.fpvracing.util.OSValidator;
 
 import net.minecraft.entity.Entity;
