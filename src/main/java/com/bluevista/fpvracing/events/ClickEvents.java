@@ -1,10 +1,5 @@
 package com.bluevista.fpvracing.events;
 
-import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.entities.DroneEntity;
-import com.bluevista.fpvracing.items.ItemDrone;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
@@ -17,7 +12,7 @@ public class ClickEvents {
      */
 //    @SubscribeEvent
 //    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-//        if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemDrone && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
+//        if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof DroneItem && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
 //            DroneEntity drone = new DroneEntity(event.getWorld());
 //            drone.setLocationAndAngles(event.getPos().getX(), event.getPos().getY()+1, event.getPos().getZ(), 0, 0);
 //            event.getWorld().addEntity(drone);
