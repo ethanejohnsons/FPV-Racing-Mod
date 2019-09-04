@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 
 import net.minecraftforge.registries.ObjectHolder;
@@ -27,14 +28,14 @@ public class EntityRegistry {
 
                 EntityType.Builder.create(DroneEntity::new, EntityClassification.MISC)
                         .setShouldReceiveVelocityUpdates(true)
-                        .setTrackingRange(24)
+                        .setTrackingRange(64)
                         .setUpdateInterval(60)
                         .build("drone")
                         .setRegistryName(FPVRacingMod.MODID, "drone")
 
         );
 
-        LOGGER.debug("Registered entities");
+        RenderingRegistry.registerEntityRenderingHandler(DroneEntity.class, DroneRenderer::new);
     }
 
 }

@@ -106,7 +106,6 @@ public class DroneEntity extends Entity {
 	}
 	
 //    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
-//    	CameraEvents.setTarget(this);
 //        setPlayerUsing(player, this);
 //        return true;
 //    }
@@ -206,8 +205,7 @@ public class DroneEntity extends Entity {
 	}
 
 	@Override
-	public IPacket<?> createSpawnPacket()
-	{
+	public IPacket<?> createSpawnPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
