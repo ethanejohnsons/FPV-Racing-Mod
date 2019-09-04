@@ -13,7 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod.EventBusSubscriber(modid = FPVRacingMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(FPVRacingMod.MODID)
 public class EntityRegistry {
 
@@ -25,14 +25,12 @@ public class EntityRegistry {
     @SubscribeEvent
     public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
         event.getRegistry().registerAll(
-
                 EntityType.Builder.create(DroneEntity::new, EntityClassification.MISC)
                         .setShouldReceiveVelocityUpdates(true)
                         .setTrackingRange(64)
                         .setUpdateInterval(60)
                         .build("drone")
                         .setRegistryName(FPVRacingMod.MODID, "drone")
-
         );
 
         RenderingRegistry.registerEntityRenderingHandler(DroneEntity.class, DroneRenderer::new);
