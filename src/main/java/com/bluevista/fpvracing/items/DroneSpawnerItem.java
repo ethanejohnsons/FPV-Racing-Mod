@@ -1,5 +1,6 @@
 package com.bluevista.fpvracing.items;
 
+import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.entities.DroneEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -9,9 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class DroneSpawnerItem extends Item {
-
-	public DroneSpawnerItem() {
-		super(new Item.Properties());
+	public DroneSpawnerItem(Item.Properties builder) {
+		super(builder);
 	}
 
 	/**

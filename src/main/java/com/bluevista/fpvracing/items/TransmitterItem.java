@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 
 public class TransmitterItem extends Item {
 
-	public TransmitterItem() {
-		super(new Properties());
+	public TransmitterItem(Item.Properties builder) {
+		super(builder);
 	}
 
 }
