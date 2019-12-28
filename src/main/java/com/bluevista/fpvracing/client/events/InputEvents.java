@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.events;
+package com.bluevista.fpvracing.client.events;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraftforge.fml.common.Mod;

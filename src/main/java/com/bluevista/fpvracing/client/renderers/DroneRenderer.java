@@ -1,14 +1,17 @@
-package com.bluevista.fpvracing.entities;
+package com.bluevista.fpvracing.client.renderers;
 
+import com.bluevista.fpvracing.server.entities.DroneEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
-
+@OnlyIn(Dist.CLIENT)
 public class DroneRenderer extends EntityRenderer<DroneEntity> {
-    protected ResourceLocation droneTexture;
+    private static final ResourceLocation droneTexture = new ResourceLocation("textures/entity/minecart.png");
 
     public DroneRenderer(EntityRendererManager renderManager) {
         super(renderManager);
@@ -17,10 +20,9 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
     @Override
     public void doRender(DroneEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         this.bindEntityTexture(entity);
-//        if (!this.renderOutlines) {
-//            this.renderName(entity, x, y, z);
-//        }
-
+        if (!this.renderOutlines) {
+            this.renderName(entity, x, y, z);
+        }
     }
 
 //    @Override

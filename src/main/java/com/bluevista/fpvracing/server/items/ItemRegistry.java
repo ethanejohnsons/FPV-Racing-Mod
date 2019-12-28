@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.items;
+package com.bluevista.fpvracing.server.items;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraft.item.Item;

@@ -1,27 +1,20 @@
-package com.bluevista.fpvracing.entities;
+package com.bluevista.fpvracing.server.entities;
 
-//import com.bluevista.fpvracing.controls.Transmitter;
-import com.bluevista.fpvracing.events.CameraEvents;
-import com.bluevista.fpvracing.math.QuaternionHelper;
-import com.bluevista.fpvracing.util.OSValidator;
+//import com.bluevista.fpvracing.client.controls.Transmitter;
+import com.bluevista.fpvracing.server.math.QuaternionHelper;
+import com.bluevista.fpvracing.client.utils.OSValidator;
 
 import net.minecraft.entity.Entity;
-		import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.PlayerEntity;
-//import net.minecraft.nbt.NBTTagCompound;
-//import net.minecraft.util.EnumHand;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-		import net.minecraft.world.World;
+import net.minecraft.world.World;
 
 import net.minecraft.client.renderer.Quaternion;
+import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 public class DroneEntity extends Entity {
-
-    private static PlayerEntity playerUsing;
-    private static DroneEntity droneBeingUsed;
 
 	private Quaternion orientation;
 
@@ -34,23 +27,29 @@ public class DroneEntity extends Entity {
 	}
 
 	public DroneEntity(World worldIn) {
-		this(EntityRegistry.drone, worldIn);
+		this(EntityRegistry.DRONE, worldIn);
+//		this.startRiding(worldIn.getPlayers().get(0));
+		LOGGER.debug(EntityRegistry.DRONE);
 		this.world = worldIn;
 		this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
 	}
 
-	@Override
+	public DroneEntity(FMLPlayMessages.SpawnEntity packet, World worldIn)
+	{
+		super(EntityRegistry.DRONE, worldIn);
+	}
+
 	public void tick() {
 		super.tick();
 		
-		if(isPlayerUsing(this)) {
-			updateInputs();
-			control();
-		}
+//		if(isPlayerUsing(this)) {
+//			updateInputs();
+//			control();
+//		}
 		
-		doPhysics();
+//		doPhysics();
 				
-        this.move(MoverType.SELF, this.getMotion());
+//        this.move(MoverType.SELF, this.getMotion());
 	}
     
 	public void doPhysics() {
@@ -137,16 +136,6 @@ public class DroneEntity extends Entity {
 //    	droneBeingUsed = d;
 //    }
     
-    public static boolean isPlayerUsing(DroneEntity d) {
-    	return playerUsing != null && droneBeingUsed.equals(d);
-    }
-    
-    public static void stopUsing() {
-    	playerUsing = null;
-    	droneBeingUsed = null;
-		CameraEvents.setTarget(null);
-    }
-
     public Quaternion getOrientation() {
     	return orientation;
     }
@@ -209,5 +198,9 @@ public class DroneEntity extends Entity {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
+	@Override
+	public EntityType<?> getType() {
+		return EntityRegistry.DRONE;
+	}
 
 }

@@ -1,6 +1,5 @@
 package com.bluevista.fpvracing;
 
-import com.bluevista.fpvracing.entities.EntityRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -22,7 +21,6 @@ public class FPVRacingMod {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public FPVRacingMod() {
-        LOGGER.info("finna construct mod boi");
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);

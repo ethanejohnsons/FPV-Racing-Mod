@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.events;
+package com.bluevista.fpvracing.client.events;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -6,13 +6,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import com.bluevista.fpvracing.entities.DroneEntity;
-import com.bluevista.fpvracing.entities.ViewHandler;
+import com.bluevista.fpvracing.server.entities.DroneEntity;
+import com.bluevista.fpvracing.server.entities.ViewHandler;
 import net.minecraft.entity.Entity;
 
-import com.bluevista.fpvracing.math.QuaternionHelper;
+import com.bluevista.fpvracing.server.math.QuaternionHelper;
 import org.lwjgl.opengl.GL11;
 
 

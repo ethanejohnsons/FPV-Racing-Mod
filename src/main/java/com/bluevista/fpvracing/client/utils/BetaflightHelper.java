@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.math;
+package com.bluevista.fpvracing.client.utils;
 
 public class BetaflightHelper {
 	

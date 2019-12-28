@@ -1,11 +1,11 @@
-package com.bluevista.fpvracing.util;
+package com.bluevista.fpvracing.client.utils;
 
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 
 //import com.bluevista.fpvracing.FPVRacingMod;
-//import com.bluevista.fpvracing.controls.Transmitter;
-import com.bluevista.fpvracing.math.QuaternionHelper;
+//import com.bluevista.fpvracing.client.controls.Transmitter;
+import com.bluevista.fpvracing.server.math.QuaternionHelper;
 
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;

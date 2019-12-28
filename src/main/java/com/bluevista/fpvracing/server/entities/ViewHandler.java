@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.entities;
+package com.bluevista.fpvracing.server.entities;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

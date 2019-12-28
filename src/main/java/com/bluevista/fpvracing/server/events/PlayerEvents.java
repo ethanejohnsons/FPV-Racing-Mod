@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.events;
+package com.bluevista.fpvracing.server.events;
 
 //import net.minecraftforge.client.event.MouseEvent;
 import com.bluevista.fpvracing.FPVRacingMod;

@@ -1,11 +1,8 @@
-package com.bluevista.fpvracing.controls;
+package com.bluevista.fpvracing.client.controls;
 
 //import org.lwjgl.LWJGLException;
 //import org.lwjgl.glfw.Controller;
 //import org.lwjgl.input.Controllers;
-
-import com.bluevista.fpvracing.math.BetaflightHelper;
-import com.bluevista.fpvracing.util.OSValidator;
 
 public class Transmitter {
 	

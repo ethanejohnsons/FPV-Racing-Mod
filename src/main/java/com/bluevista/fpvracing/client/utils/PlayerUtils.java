@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.util;
+package com.bluevista.fpvracing.client.utils;
 
 public class PlayerUtils {
 	

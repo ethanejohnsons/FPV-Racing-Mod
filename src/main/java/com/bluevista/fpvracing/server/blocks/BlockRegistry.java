@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.blocks;
+package com.bluevista.fpvracing.server.blocks;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraft.block.Block;
@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod.EventBusSubscriber(modid = FPVRacingMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(FPVRacingMod.MODID)
 public class BlockRegistry {
 

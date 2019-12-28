@@ -1,6 +1,7 @@
-package com.bluevista.fpvracing.entities;
+package com.bluevista.fpvracing.server.entities;
 
 import com.bluevista.fpvracing.FPVRacingMod;
+import com.bluevista.fpvracing.client.renderers.DroneRenderer;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -11,28 +12,27 @@ import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
-@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid=FPVRacingMod.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(FPVRacingMod.MODID)
 public class EntityRegistry {
 
     private static final Logger LOGGER = LogManager.getLogger(FPVRacingMod.MODID + " Entity Registry");
-
-    // Entities
-    public static final EntityType<DroneEntity> drone = null;
+    public static final EntityType<DroneEntity> DRONE = null;
 
     @SubscribeEvent
     public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
-        event.getRegistry().registerAll(
-                EntityType.Builder.create(DroneEntity::new, EntityClassification.MISC)
-                        .setShouldReceiveVelocityUpdates(true)
-                        .setTrackingRange(64)
-                        .setUpdateInterval(60)
-                        .build("drone")
-                        .setRegistryName(FPVRacingMod.MODID, "drone")
-        );
+       event.getRegistry().registerAll(
+               EntityType.Builder.create(DroneEntity::new, EntityClassification.MISC)
+                       .setCustomClientFactory(DroneEntity::new)
+                       .setShouldReceiveVelocityUpdates(true)
+                       .setTrackingRange(64)
+                       .setUpdateInterval(60)
+                       .build("drone")
+                       .setRegistryName(FPVRacingMod.MODID, "drone")
+       );
 
         RenderingRegistry.registerEntityRenderingHandler(DroneEntity.class, DroneRenderer::new);
+        LOGGER.debug("Registered entities");
     }
 
 }
