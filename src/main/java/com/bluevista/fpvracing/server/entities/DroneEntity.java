@@ -36,6 +36,7 @@ public class DroneEntity extends Entity {
 		this(EntityRegistry.DRONE, worldIn);
 	}
 
+	@Override
 	public void tick() {
 		super.tick();
 
@@ -118,16 +119,15 @@ public class DroneEntity extends Entity {
     
     @Nullable
     public AxisAlignedBB getCollisionBox(Entity entityIn) {
-        return entityIn.canBePushed() ? entityIn.getCollisionBoundingBox() : null;
+        return entityIn.canBePushed() ? entityIn.getBoundingBox() : null;
     }
 
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox() {
-        return this.getCollisionBoundingBox();
+        return this.getBoundingBox();
     }
 
-    public boolean canBePushed()
-    {
+    public boolean canBePushed() {
         return true;
     }
 	

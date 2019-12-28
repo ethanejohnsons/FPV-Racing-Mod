@@ -1,6 +1,8 @@
 package com.bluevista.fpvracing.client.renderers;
 
+import com.bluevista.fpvracing.client.models.DroneModel;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -11,18 +13,30 @@ import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class DroneRenderer extends EntityRenderer<DroneEntity> {
-    private static final ResourceLocation droneTexture = new ResourceLocation("textures/entity/minecart.png");
+    private static final ResourceLocation droneTexture = new ResourceLocation("textures/entity/cow/cow.png");
+    private static DroneModel droneModel = new DroneModel();
 
     public DroneRenderer(EntityRendererManager renderManager) {
         super(renderManager);
     }
 
-    @Override
+//    @Override
     public void doRender(DroneEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
-        if (!this.renderOutlines) {
-            this.renderName(entity, x, y, z);
-        }
+        this.setupRotation(entity, entityYaw, partialTicks);
+        this.setupTranslation(x, y, z);
+        droneModel.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+        GlStateManager.popMatrix();
+        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    }
+
+    public void setupRotation(DroneEntity entityIn, float entityYaw, float partialTicks) {
+        GlStateManager.rotatef(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
+    }
+
+    public void setupTranslation(double x, double y, double z) {
+        GlStateManager.translatef((float)x, (float)y + 0.375F, (float)z);
     }
 
 //    @Override
