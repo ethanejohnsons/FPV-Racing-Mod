@@ -1,6 +1,7 @@
-package com.bluevista.fpvracing.server.entities;
+package com.bluevista.fpvracing.server;
 
 import com.bluevista.fpvracing.FPVRacingMod;
+import com.bluevista.fpvracing.server.entities.DroneEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
@@ -15,19 +16,13 @@ import org.apache.logging.log4j.Logger;
 public class EntityRegistry {
 
     private static final Logger LOGGER = LogManager.getLogger(FPVRacingMod.MODID + " Entity Registry");
-    public static final EntityType<DroneEntity> DRONE = null;
+    public static EntityType<?> DRONE = EntityType.Builder.<DroneEntity>create(DroneEntity::new, EntityClassification.MISC).setCustomClientFactory(DroneEntity::new).build(FPVRacingMod.MODID + ":drone").setRegistryName(FPVRacingMod.MODID, "drone");
 
     @SubscribeEvent
     public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
-       event.getRegistry().registerAll(
-               EntityType.Builder.create(DroneEntity::new, EntityClassification.MISC)
-                       .setCustomClientFactory(DroneEntity::new)
-                       .setShouldReceiveVelocityUpdates(true)
-                       .setTrackingRange(64)
-                       .setUpdateInterval(60)
-                       .build("drone")
-                       .setRegistryName(FPVRacingMod.MODID, "drone")
-       );
+        event.getRegistry().registerAll(
+                DRONE
+        );
 
        LOGGER.debug("Registered entities");
     }

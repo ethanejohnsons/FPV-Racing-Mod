@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.server.blocks;
+package com.bluevista.fpvracing.server;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import net.minecraft.block.Block;

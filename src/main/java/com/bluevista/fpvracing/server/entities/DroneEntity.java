@@ -1,47 +1,44 @@
 package com.bluevista.fpvracing.server.entities;
 
 //import com.bluevista.fpvracing.client.controls.Transmitter;
+import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
 import com.bluevista.fpvracing.client.utils.OSValidator;
 
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.annotation.Nullable;
+
 public class DroneEntity extends Entity {
 
 	private Quaternion orientation;
 
-    private double throttle;
     private double axis[] = new double[4]; // input
     
 	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
 		super(entityTypeIn, worldIn);
+		this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
 		// TODO nbt tags - channel, camera_angle, etc.
 	}
 
-	public DroneEntity(World worldIn) {
+	public DroneEntity(FMLPlayMessages.SpawnEntity packet, World worldIn) {
 		this(EntityRegistry.DRONE, worldIn);
-//		this.startRiding(worldIn.getPlayers().get(0));
-		LOGGER.debug(EntityRegistry.DRONE);
-		this.world = worldIn;
-		this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
-	}
-
-	public DroneEntity(FMLPlayMessages.SpawnEntity packet, World worldIn)
-	{
-		super(EntityRegistry.DRONE, worldIn);
 	}
 
 	public void tick() {
 		super.tick();
-		
+
 //		if(isPlayerUsing(this)) {
 //			updateInputs();
 //			control();
@@ -49,44 +46,23 @@ public class DroneEntity extends Entity {
 		
 //		doPhysics();
 				
-//        this.move(MoverType.SELF, this.getMotion());
+        this.move(MoverType.SELF, this.getMotion());
 	}
     
 	public void doPhysics() {
-//		if(this.motionY >= -1.5) // terminal velocity
-//			this.motionY -= 0.06D; // Gravity
-//
-//		 Drag
-//		if(this.onGround) {
-//			this.motionX -= this.motionX*0.18;
-//			this.motionZ -= this.motionZ*0.18;
-//		} else { // in air
-//			if(this.motionX > 0)
-//				this.motionX -= 0.02D;
-//			else if(this.motionX < 0)
-//				this.motionX += 0.02D;
-//
-//			if(this.motionZ > 0)
-//				this.motionZ -= 0.02D;
-//			else if(this.motionZ < 0)
-//				this.motionZ += 0.02D;
-//
-//			this.motionY -= 0.02D;
-//		}
-//
-//		Vector3f d = QuaternionHelper.rotationMatrixToVector(
-//				QuaternionHelper.quatToMatrix(
-//				QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
+		Vector3f d = QuaternionHelper.rotationMatrixToVector(
+				QuaternionHelper.quatToMatrix(
+				QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
 //		this.addVelocity(-d.getX() * this.getThrottle(), d.getY() * this.getThrottle(), -d.getZ() * this.getThrottle());
 //		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 	}
 		
-	public void control() {
-		this.changePitch((float) axis[0]);
-		this.changeYaw((float) axis[1]);
-		this.changeRoll((float) axis[2]);
-		this.setThrottle((float) axis[3]);
-	}
+//	public void control() {
+//		this.changePitch((float) axis[0]);
+//		this.changeYaw((float) axis[1]);
+//		this.changeRoll((float) axis[2]);
+//		this.setThrottle((float) axis[3]);
+//	}
 	
 	public void changePitch(float angle) {
 		orientation = QuaternionHelper.rotateX(orientation, angle);
@@ -100,9 +76,9 @@ public class DroneEntity extends Entity {
 		orientation = QuaternionHelper.rotateY(orientation, angle);
 	}
 	
-	public void setThrottle(float throttle) {
-		this.throttle = throttle;
-	}
+//	public void setThrottle(float throttle) {
+//		this.throttle = throttle;
+//	}
 	
 //    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
 //        setPlayerUsing(player, this);
@@ -140,17 +116,15 @@ public class DroneEntity extends Entity {
     	return orientation;
     }
     
-//    @Nullable
-//    public AxisAlignedBB getCollisionBox(Entity entityIn)
-//    {
-//        return entityIn.canBePushed() ? entityIn.getEntityBoundingBox() : null;
-//    }
-//
-//    @Nullable
-//    public AxisAlignedBB getCollisionBoundingBox()
-//    {
-//        return this.getEntityBoundingBox();
-//    }
+    @Nullable
+    public AxisAlignedBB getCollisionBox(Entity entityIn) {
+        return entityIn.canBePushed() ? entityIn.getCollisionBoundingBox() : null;
+    }
+
+    @Nullable
+    public AxisAlignedBB getCollisionBoundingBox() {
+        return this.getCollisionBoundingBox();
+    }
 
     public boolean canBePushed()
     {

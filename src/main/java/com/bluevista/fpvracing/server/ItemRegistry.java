@@ -1,6 +1,9 @@
-package com.bluevista.fpvracing.server.items;
+package com.bluevista.fpvracing.server;
 
 import com.bluevista.fpvracing.FPVRacingMod;
+import com.bluevista.fpvracing.server.items.DroneSpawnerItem;
+import com.bluevista.fpvracing.server.items.GogglesItem;
+import com.bluevista.fpvracing.server.items.TransmitterItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;

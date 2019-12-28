@@ -1,7 +1,7 @@
 package com.bluevista.fpvracing.server.items;
 
-import com.bluevista.fpvracing.server.entities.DroneEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import com.bluevista.fpvracing.server.EntityRegistry;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
@@ -14,19 +14,13 @@ public class DroneSpawnerItem extends Item {
 	}
 
 	/**
-	 * Called when this item is used when targeting a Block
+	 * Called when this item is used while targeting a Block
 	 */
 	public ActionResultType onItemUse(ItemUseContext context) {
-		PlayerEntity playerentity = context.getPlayer();
 		World world = context.getWorld();
 		if (!world.isRemote) {
-			BlockPos blockpos = context.getPos();
-
-			DroneEntity drone = new DroneEntity(world);
-			drone.setLocationAndAngles(blockpos.getX(), blockpos.getY()+1, blockpos.getZ(), 0, 0);
-//			drone.rotationYaw = playerentity.rotationYaw;
-			world.addEntity(drone);
-
+			BlockPos pos = context.getPos().add(0, 1, 0);
+			EntityRegistry.DRONE.spawn(world, context.getItem(), context.getPlayer(), pos, SpawnReason.SPAWNER, false, false);
 //			this.handleClick(playerentity, world.getBlockState(blockpos), world, blockpos, true, context.getItem());
 		}
 
