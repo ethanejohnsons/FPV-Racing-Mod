@@ -1,12 +1,10 @@
 package com.bluevista.fpvracing.server.entities;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.client.renderers.DroneRenderer;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.LogManager;
@@ -31,8 +29,7 @@ public class EntityRegistry {
                        .setRegistryName(FPVRacingMod.MODID, "drone")
        );
 
-        RenderingRegistry.registerEntityRenderingHandler(DroneEntity.class, DroneRenderer::new);
-        LOGGER.debug("Registered entities");
+       LOGGER.debug("Registered entities");
     }
 
 }
