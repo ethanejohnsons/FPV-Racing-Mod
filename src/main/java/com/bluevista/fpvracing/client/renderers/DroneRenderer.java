@@ -20,7 +20,6 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
         super(renderManager);
     }
 
-//    @Override
     public void doRender(DroneEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
@@ -32,7 +31,7 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
     }
 
     public void setupRotation(DroneEntity entityIn, float entityYaw, float partialTicks) {
-        GlStateManager.rotatef(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
+//        GlStateManager.rotatef(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
     }
 
     public void setupTranslation(double x, double y, double z) {

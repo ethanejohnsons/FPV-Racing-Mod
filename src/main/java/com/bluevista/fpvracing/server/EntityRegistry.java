@@ -17,12 +17,11 @@ public class EntityRegistry {
 
     private static final Logger LOGGER = LogManager.getLogger(FPVRacingMod.MODID + " Entity Registry");
     public static EntityType<?> DRONE = EntityType.Builder.<DroneEntity>create(DroneEntity::new, EntityClassification.MISC).setCustomClientFactory(DroneEntity::new).build(FPVRacingMod.MODID + ":drone").setRegistryName(FPVRacingMod.MODID, "drone");
+//    public static EntityType<?> VIEW = EntityType.Builder.<ViewHandler>create(ViewHandler::new, EntityClassification.MISC).setCustomClientFactory(ViewHandler::new).build(FPVRacingMod.MODID + ":view").setRegistryName(FPVRacingMod.MODID, "view");
 
     @SubscribeEvent
     public static void registerEntities(final RegistryEvent.Register<EntityType<?>> event) {
-        event.getRegistry().registerAll(
-                DRONE
-        );
+        event.getRegistry().registerAll(DRONE);
 
        LOGGER.debug("Registered entities");
     }

@@ -1,30 +1,53 @@
 package com.bluevista.fpvracing.client.events;
 
 import com.bluevista.fpvracing.FPVRacingMod;
+import com.bluevista.fpvracing.server.entities.DroneEntity;
+import com.bluevista.fpvracing.server.items.GogglesItem;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
-
-import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
-import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.registries.ObjectHolder;
 
-import com.bluevista.fpvracing.server.math.QuaternionHelper;
-import org.lwjgl.opengl.GL11;
-
-
-@Mod.EventBusSubscriber(modid = FPVRacingMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(FPVRacingMod.MODID)
+@OnlyIn(Dist.CLIENT)
 public class CameraEvents {
-	
-	private static ViewHandler viewEntity;
-	private static Entity target;
-	
+
+	static DroneEntity currentDrone;
+
 	@SubscribeEvent
-	public static void onRenderHand(RenderHandEvent event) {
-		if(Minecraft.getInstance().getRenderViewEntity() instanceof ViewHandler)
-			event.setCanceled(true); // no more hand
+	public static void onRenderHand(final RenderHandEvent event) {
+		/*
+		 * If the player is currently flying a drone (i.e. looking through a ViewHandler object),
+		 * the hand of the player is not rendered.
+		 */
+		if(Minecraft.getInstance().getRenderViewEntity() instanceof DroneEntity) event.setCanceled(true);
+	}
+
+	@SubscribeEvent
+	public static void onRenderTick(final TickEvent.RenderTickEvent event) {
+		Minecraft mc = Minecraft.getInstance();
+
+		if (mc.player != null) {
+			if (mc.player.getHeldItemMainhand().getItem() instanceof GogglesItem) {
+				if (!(mc.getRenderViewEntity() instanceof DroneEntity)) {
+					currentDrone = DroneEntity.getNearestDroneTo(mc.player);
+					currentDrone.createNewView();
+				}
+			} else if(mc.getRenderViewEntity() instanceof DroneEntity) {
+				mc.setRenderViewEntity(mc.player);
+			}
+		}
+
+		if(currentDrone != null) {
+			currentDrone.playerTick();
+		}
 	}
 	
 	/*
@@ -33,19 +56,19 @@ public class CameraEvents {
 	 * rotation code is used.
 	 */
 	@SubscribeEvent
-	public static void cameraUpdate(EntityViewRenderEvent.CameraSetup event) { // TODO make separate funcitnon to find out if player is using drone
-		Entity currentViewEntity = Minecraft.getInstance().getRenderViewEntity();
-		if(currentViewEntity instanceof ViewHandler) {
-			if( ((ViewHandler)currentViewEntity).getTarget() instanceof DroneEntity) {
-				DroneEntity drone = (DroneEntity)((ViewHandler)currentViewEntity).getTarget();
-				GL11.glMultMatrixf(
-				   QuaternionHelper.toBuffer(
-				   QuaternionHelper.quatToMatrix(
-				      drone.getOrientation()))); // Applies to screen
-			}
-		} else {
-			GL11.glRotated(0, 1f, 1f, 1f);
-		}
+	public static void cameraUpdate(final EntityViewRenderEvent.CameraSetup event) { // TODO make separate funcitnon to find out if player is using drone
+//		Entity currentViewEntity = Minecraft.getInstance().getRenderViewEntity();
+//		if(currentViewEntity instanceof ViewHandler) {
+//			if(((ViewHandler)currentViewEntity).getTarget() instanceof DroneEntity) {
+//				DroneEntity drone = (DroneEntity)((ViewHandler)currentViewEntity).getTarget();
+//				GL11.glMultMatrixf(
+//				   QuaternionHelper.toBuffer(
+//				   QuaternionHelper.quatToMatrix(
+//				      drone.getOrientation()))); // Applies to screen
+//			}
+//		} else {
+//			GL11.glRotated(0, 1f, 1f, 1f);
+//		}
 	}
 	
 //	@SubscribeEvent
@@ -68,14 +91,6 @@ public class CameraEvents {
 //		    mc.gameSettings.thirdPersonView = 0;
 //		}
 //	}
-	
-	public static void setTarget(Entity e) {
-		target = e;
-	}
-	
-	public static Entity getTarget() {
-		return target;
-	}
 	
 //	public static void spawnViewHandler(World world, ViewHandler view) {
 //        int i = MathHelper.floor(view.posX / 16.0D);

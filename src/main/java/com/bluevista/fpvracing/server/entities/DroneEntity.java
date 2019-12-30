@@ -1,16 +1,18 @@
 package com.bluevista.fpvracing.server.entities;
 
-//import com.bluevista.fpvracing.client.controls.Transmitter;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
-import com.bluevista.fpvracing.client.utils.OSValidator;
 
+import javafx.geometry.Side;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -18,17 +20,17 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
-import javax.annotation.Nullable;
+import java.util.List;
 
 public class DroneEntity extends Entity {
 
-	private Quaternion orientation;
+	protected CompoundNBT properties = new CompoundNBT();
+	protected Quaternion orientation;
 
-    private double axis[] = new double[4]; // input
-    
 	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
 		super(entityTypeIn, worldIn);
 		this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
+		properties.putInt("channel", 0);
 		// TODO nbt tags - channel, camera_angle, etc.
 	}
 
@@ -36,20 +38,40 @@ public class DroneEntity extends Entity {
 		this(EntityRegistry.DRONE, worldIn);
 	}
 
+	public void createNewView() {
+//		ViewHandler view = new ViewHandler(this.world, this);
+//		this.world.addEntity(view);
+		Minecraft.getInstance().setRenderViewEntity(this);
+	}
+
 	@Override
 	public void tick() {
+
+	}
+
+	public void playerTick() {
 		super.tick();
 
+		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
+		this.addVelocity(-d.getX() * 50, d.getY() * 50, -d.getZ() * 50);
+		this.move(MoverType.SELF, this.getMotion());
+	}
+
+//	@Override
+//	public void tick() {
+//		super.tick();
+//
 //		if(isPlayerUsing(this)) {
 //			updateInputs();
 //			control();
 //		}
-		
+//
 //		doPhysics();
-				
-        this.move(MoverType.SELF, this.getMotion());
-	}
-    
+//
+//        this.move(MoverType.SELF, this.getMotion());
+//        this.setNoGravity(false);
+//	}
+
 	public void doPhysics() {
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(
 				QuaternionHelper.quatToMatrix(
@@ -76,96 +98,64 @@ public class DroneEntity extends Entity {
 	public void changeYaw(float angle) {
 		orientation = QuaternionHelper.rotateY(orientation, angle);
 	}
-	
-//	public void setThrottle(float throttle) {
-//		this.throttle = throttle;
-//	}
-	
-//    public boolean processInitialInteract(PlayerEntity player, EnumHand hand) {
-//        setPlayerUsing(player, this);
-//        return true;
-//    }
 
 //    @SideOnly(Side.CLIENT)
-    public void updateInputs() {
-    	int[] order = new int[4];
-		if(OSValidator.isMac()) {
-			order[0] = 2;
-			order[1] = 3;
-			order[2] = 1;
-			order[3] = 0;
-		} else {
-			order[0] = 1;
-			order[1] = 0;
-			order[2] = 2;
-			order[3] = 3;
-		}
+//    public void updateInputs() {
+//    	int[] order = new int[4];
+//		if(OSValidator.isMac()) {
+//			order[0] = 2;
+//			order[1] = 3;
+//			order[2] = 1;
+//			order[3] = 0;
+//		} else {
+//			order[0] = 1;
+//			order[1] = 0;
+//			order[2] = 2;
+//			order[3] = 3;
+//		}
     	
 //		Transmitter t = FPVRacingMod.transmitter;
 //		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 //		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 //		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
 //		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 15;		   // throttle
-    }
+//    }
     
 //    public static void setPlayerUsing(PlayerEntity p, DroneEntity d) {
 //    	playerUsing = p;
 //    	droneBeingUsed = d;
 //    }
-    
+
+	public void setChannel(int channel) {
+		this.properties.putInt("channel", channel);
+	}
+
+	public int getChannel() {
+		return this.properties.getInt("channel");
+	}
+
     public Quaternion getOrientation() {
     	return orientation;
     }
-    
-    @Nullable
-    public AxisAlignedBB getCollisionBox(Entity entityIn) {
-        return entityIn.canBePushed() ? entityIn.getBoundingBox() : null;
-    }
 
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox() {
-        return this.getBoundingBox();
-    }
+    @Override
+	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
+		return true;
+	}
 
+    @Override
     public boolean canBePushed() {
         return true;
     }
 	
-//	public void applyEntityCollision(Entity entityIn)
-//    {
-//        if (entityIn instanceof EntityBoat)
-//        {
-//            if (entityIn.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY)
-//            {
-//                super.applyEntityCollision(entityIn);
-//            }
-//        }
-//        else if (entityIn.getEntityBoundingBox().minY <= this.getEntityBoundingBox().minY)
-//        {
-//            super.applyEntityCollision(entityIn);
-//        }
-//    }
-	
-//    @Override
-//    public void updatePassenger(Entity passenger)
-//    {
-//        passenger.setPosition(this.posX, this.posY, this.posZ);
-//    }
+	@Override
+	protected void registerData() { }
 
 	@Override
-	protected void registerData() {
-
-	}
+	protected void readAdditional(CompoundNBT compound) { }
 
 	@Override
-	protected void readAdditional(CompoundNBT compound) {
-
-	}
-
-	@Override
-	protected void writeAdditional(CompoundNBT compound) {
-
-	}
+	protected void writeAdditional(CompoundNBT compound) { }
 
 	@Override
 	public IPacket<?> createSpawnPacket() {
@@ -177,4 +167,13 @@ public class DroneEntity extends Entity {
 		return EntityRegistry.DRONE;
 	}
 
+	public static DroneEntity getNearestDroneTo(Entity entity) {
+		World world = entity.getEntityWorld();
+		List<DroneEntity> drones = world.getEntitiesWithinAABB(DroneEntity.class,
+				new AxisAlignedBB(entity.posX-100, entity.posY-100, entity.posZ-100,
+						entity.posX+100, entity.posY+100, entity.posZ+100));
+//		if(drones.size() > 0) return drones.get(0);
+//		else return null;
+		return drones.get(0);
+	}
 }
