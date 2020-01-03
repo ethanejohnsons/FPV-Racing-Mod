@@ -1,7 +1,7 @@
 package com.bluevista.fpvracing;
 
 import com.bluevista.fpvracing.client.RendererRegistry;
-import com.bluevista.fpvracing.client.events.CameraEvents;
+import com.bluevista.fpvracing.client.events.RenderEvents;
 import com.bluevista.fpvracing.server.events.PlayerEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -28,7 +28,7 @@ public class FPVRacingMod {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(CameraEvents.class);
+        MinecraftForge.EVENT_BUS.register(RenderEvents.class);
         MinecraftForge.EVENT_BUS.register(PlayerEvents.class);
     }
 

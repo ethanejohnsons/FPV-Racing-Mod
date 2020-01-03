@@ -21,7 +21,6 @@ public class DroneSpawnerItem extends Item {
 		if (!world.isRemote) {
 			BlockPos pos = context.getPos().add(0, 1, 0);
 			EntityRegistry.DRONE.spawn(world, context.getItem(), context.getPlayer(), pos, SpawnReason.SPAWNER, false, false);
-//			this.handleClick(playerentity, world.getBlockState(blockpos), world, blockpos, true, context.getItem());
 		}
 
 		return ActionResultType.SUCCESS;

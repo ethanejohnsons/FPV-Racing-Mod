@@ -1,5 +1,6 @@
 package com.bluevista.fpvracing.server.entities;
 
+import com.bluevista.fpvracing.client.events.RenderEvents;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
 
@@ -38,23 +39,19 @@ public class DroneEntity extends Entity {
 		this(EntityRegistry.DRONE, worldIn);
 	}
 
-	public void createNewView() {
-//		ViewHandler view = new ViewHandler(this.world, this);
-//		this.world.addEntity(view);
-		Minecraft.getInstance().setRenderViewEntity(this);
-	}
-
 	@Override
 	public void tick() {
-
-	}
-
-	public void playerTick() {
 		super.tick();
 
+		if(RenderEvents.current != this) {
+			movementTick(1);
+		}
+	}
+
+	public void movementTick(float delta) {
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
-		this.addVelocity(-d.getX() * 50, d.getY() * 50, -d.getZ() * 50);
-		this.move(MoverType.SELF, this.getMotion());
+		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.5);
+		this.move(MoverType.PLAYER, this.getMotion());
 	}
 
 //	@Override
@@ -72,14 +69,6 @@ public class DroneEntity extends Entity {
 //        this.setNoGravity(false);
 //	}
 
-	public void doPhysics() {
-		Vector3f d = QuaternionHelper.rotationMatrixToVector(
-				QuaternionHelper.quatToMatrix(
-				QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
-//		this.addVelocity(-d.getX() * this.getThrottle(), d.getY() * this.getThrottle(), -d.getZ() * this.getThrottle());
-//		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-	}
-		
 //	public void control() {
 //		this.changePitch((float) axis[0]);
 //		this.changeYaw((float) axis[1]);
