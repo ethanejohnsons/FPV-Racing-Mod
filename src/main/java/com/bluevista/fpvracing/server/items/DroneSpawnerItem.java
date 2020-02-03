@@ -1,6 +1,7 @@
 package com.bluevista.fpvracing.server.items;
 
 import com.bluevista.fpvracing.server.EntityRegistry;
+import com.bluevista.fpvracing.server.entities.DroneEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
@@ -20,7 +21,10 @@ public class DroneSpawnerItem extends Item {
 		World world = context.getWorld();
 		if (!world.isRemote) {
 			BlockPos pos = context.getPos().add(0, 1, 0);
-			EntityRegistry.DRONE.spawn(world, context.getItem(), context.getPlayer(), pos, SpawnReason.SPAWNER, false, false);
+			DroneEntity d = new DroneEntity(EntityRegistry.DRONE, world);
+			d.setPosition(pos.getX(), pos.getY(), pos.getZ());
+			world.addEntity(d);
+//			EntityRegistry.DRONE.spawn(world, context.getItem(), context.getPlayer(), pos, SpawnReason.SPAWNER, false, false);
 		}
 
 		return ActionResultType.SUCCESS;
