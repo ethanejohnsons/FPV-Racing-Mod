@@ -3,7 +3,7 @@ package com.bluevista.fpvracing.client.events;
 import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
-import com.bluevista.fpvracing.server.items.GogglesItem;
+import com.bluevista.fpvracing.server.items.ItemGoggles;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,7 +37,7 @@ public class RenderEvents {
 
 		// If a world is loaded...
 		if (mc.player != null) {
-			if (mc.player.getHeldItemMainhand().getItem() instanceof GogglesItem) {
+			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles) {
 				if (!(mc.getRenderViewEntity() instanceof DroneEntity)) {
 					current = DroneEntity.getNearestDroneTo(mc.player);
 //					view = new ViewHandler(mc.player.getEntityWorld(), closest);

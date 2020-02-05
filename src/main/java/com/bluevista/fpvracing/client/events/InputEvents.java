@@ -13,7 +13,7 @@ public class InputEvents {
      */
 //    @SubscribeEvent
 //    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-//        if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof DroneSpawnerItem && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
+//        if(event.getEntityPlayer().getHeldItemMainhand().getItem() instanceof ItemDroneSpawner && !event.getWorld().isRemote && event.getHand() == event.getEntityPlayer().getActiveHand()) {
 //            DroneEntity drone = new DroneEntity(event.getWorld());
 //            drone.setLocationAndAngles(event.getPos().getX(), event.getPos().getY()+1, event.getPos().getZ(), 0, 0);
 //            event.getWorld().addEntity(drone);

@@ -1,9 +1,9 @@
 package com.bluevista.fpvracing.server;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.server.items.DroneSpawnerItem;
-import com.bluevista.fpvracing.server.items.GogglesItem;
-import com.bluevista.fpvracing.server.items.TransmitterItem;
+import com.bluevista.fpvracing.server.items.ItemDroneSpawner;
+import com.bluevista.fpvracing.server.items.ItemGoggles;
+import com.bluevista.fpvracing.server.items.ItemTransmitter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;
@@ -23,17 +23,17 @@ public class ItemRegistry {
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
-                new DroneSpawnerItem(new Item.Properties()
+                new ItemDroneSpawner(new Item.Properties()
                         .maxStackSize(64)
                         .group(ItemGroup.MISC))
                         .setRegistryName(FPVRacingMod.MODID, "drone_spawner"),
 
-                new GogglesItem(new Item.Properties()
+                new ItemGoggles(new Item.Properties()
                         .maxStackSize(1)
                         .group(ItemGroup.MISC))
                         .setRegistryName(FPVRacingMod.MODID, "drone_goggles"),
 
-                new TransmitterItem(new Item.Properties()
+                new ItemTransmitter(new Item.Properties()
                         .maxStackSize(1)
                         .group(ItemGroup.MISC))
                         .setRegistryName(FPVRacingMod.MODID, "drone_transmitter")

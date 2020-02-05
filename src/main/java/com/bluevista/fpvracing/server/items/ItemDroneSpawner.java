@@ -9,8 +9,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class DroneSpawnerItem extends Item {
-	public DroneSpawnerItem(Item.Properties builder) {
+public class ItemDroneSpawner extends Item {
+	public ItemDroneSpawner(Item.Properties builder) {
 		super(builder);
 	}
 
