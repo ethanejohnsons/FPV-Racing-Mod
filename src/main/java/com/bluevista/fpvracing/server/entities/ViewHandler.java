@@ -29,9 +29,15 @@ public class ViewHandler extends Entity {
     }
 
     public void viewTick(float delta) {
-        if(target != null) {
+//        if(target != null) {
 //            this.setPosition(target.posX, target.posY, target.posZ);
-        }
+//        }
+    }
+
+    public void tick() {
+//        if(target != null) {
+//            this.setPosition(target.posX, target.posY, target.posZ);
+//        }
     }
 
     public Entity getTarget() {

@@ -4,8 +4,6 @@ import com.bluevista.fpvracing.client.events.RenderEvents;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
 
-import javafx.geometry.Side;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -43,7 +41,7 @@ public class DroneEntity extends Entity {
 	public void tick() {
 		super.tick();
 
-		if(RenderEvents.current != this) {
+		if(RenderEvents.currentDrone != this) {
 			movementTick(1);
 		}
 	}
@@ -161,8 +159,7 @@ public class DroneEntity extends Entity {
 		List<DroneEntity> drones = world.getEntitiesWithinAABB(DroneEntity.class,
 				new AxisAlignedBB(entity.posX-100, entity.posY-100, entity.posZ-100,
 						entity.posX+100, entity.posY+100, entity.posZ+100));
-//		if(drones.size() > 0) return drones.get(0);
-//		else return null;
-		return drones.get(0);
+		if(drones.size() > 0) return drones.get(0);
+		else return null;
 	}
 }

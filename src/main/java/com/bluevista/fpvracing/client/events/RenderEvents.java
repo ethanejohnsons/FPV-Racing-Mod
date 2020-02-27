@@ -20,7 +20,8 @@ import org.lwjgl.opengl.GL11;
 @OnlyIn(Dist.CLIENT)
 public class RenderEvents {
 
-	public static DroneEntity current;
+	public static DroneEntity currentDrone;
+	public static ViewHandler view;
 
 	@SubscribeEvent
 	public static void onRenderHand(final RenderHandEvent event) {
@@ -35,24 +36,25 @@ public class RenderEvents {
 	public static void onRenderTick(final TickEvent.RenderTickEvent event) {
 		Minecraft mc = Minecraft.getInstance();
 
-		// If a world is loaded...
-		if (mc.player != null) {
-			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles) {
-				if (!(mc.getRenderViewEntity() instanceof DroneEntity)) {
-					current = DroneEntity.getNearestDroneTo(mc.player);
-//					view = new ViewHandler(mc.player.getEntityWorld(), closest);
-//					mc.player.getEntityWorld().addEntity(view);
-					Minecraft.getInstance().setRenderViewEntity(current);
+		if (mc.player != null) { // if there is a world loaded...
+
+			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles) { // if the player is holding goggles...
+
+				if (!(mc.getRenderViewEntity() instanceof ViewHandler)) {
+					currentDrone = DroneEntity.getNearestDroneTo(mc.player);
+					view = new ViewHandler(mc.player.getEntityWorld(), currentDrone);
+					view.getEntityWorld().addEntity(view);
+					Minecraft.getInstance().setRenderViewEntity(view);
 				}
 
-			} else if(mc.getRenderViewEntity() instanceof DroneEntity) {
-				mc.setRenderViewEntity(mc.player);
+			} else if(mc.getRenderViewEntity() instanceof ViewHandler) {
+				mc.setRenderViewEntity(mc.player); // switch back to player
 			}
 		}
 
-		if(current != null) {
-			current.movementTick(event.renderTickTime);
-		}
+//		if(currentDrone != null) {
+//			currentDrone.movementTick(event.renderTickTime);
+//		}
 
 //		if(view != null) {
 //			view.viewTick(event.renderTickTime);
