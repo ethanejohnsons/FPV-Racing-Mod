@@ -50,16 +50,15 @@ public class ViewHandler extends Entity {
             double deltaPosY = this.target.prevPosY + (this.target.posY - this.target.prevPosY) * (double)delta;
             double deltaPosZ = this.target.prevPosZ + (this.target.posZ - this.target.prevPosZ) * (double)delta;
 
-            this.CamPosX = deltaPosX; //- Math.sin(this.CamRadialXZ) * Math.cos(this.CamRadialY) * distance;
-            this.CamPosZ = deltaPosZ; // - Math.cos(this.CamRadialXZ) * Math.cos(this.CamRadialY) * distance;
-            this.CamPosY = deltaPosY; // + Math.sin(this.CamRadialY) * distance * Math.cos((double)(this.yawOffset * this.degToRad));
+            this.CamPosX = deltaPosX;
+            this.CamPosZ = deltaPosZ;
+            this.CamPosY = deltaPosY;
 
             this.setPosition(this.CamPosX, this.CamPosY, this.CamPosZ);
 
             this.prevPosX = this.posX;
             this.prevPosY = this.posY;
             this.prevPosZ = this.posZ;
-            this.setPosition(target.posX, target.posY, target.posZ);
         }
     }
 

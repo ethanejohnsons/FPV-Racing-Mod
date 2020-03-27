@@ -1,16 +1,13 @@
 package com.bluevista.fpvracing.client.events;
 
 import com.bluevista.fpvracing.FPVRacingMod;
-import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
 import com.bluevista.fpvracing.server.items.ItemGoggles;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -18,8 +15,6 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.registries.ObjectHolder;
 import org.lwjgl.opengl.GL11;
-
-import javax.swing.text.View;
 
 @ObjectHolder(FPVRacingMod.MODID)
 @OnlyIn(Dist.CLIENT)
@@ -45,13 +40,11 @@ public class RenderEvents {
 			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles &&
 					DroneEntity.getNearestDroneTo(mc.player) != null) { // if the player is holding goggles...
 
-				if(view != null) view.clientTick(event.renderTickTime);
+				if(view != null) view.clientTick(event.renderTickTime); // ...update the ViewHandler...
 
-				if (!(mc.getRenderViewEntity() instanceof ViewHandler)) {
+				if (!(mc.getRenderViewEntity() instanceof ViewHandler)) { // ...and if a ViewHandler doesn't exist, create one
 					currentDrone = DroneEntity.getNearestDroneTo(mc.player);
 					view = new ViewHandler(mc.world, currentDrone);
-//					mc.world.addEntity(view);
-					System.err.println("=================================================================");
 					mc.setRenderViewEntity(view);
 				}
 
