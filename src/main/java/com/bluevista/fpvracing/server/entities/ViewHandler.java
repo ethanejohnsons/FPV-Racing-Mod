@@ -1,11 +1,10 @@
 package com.bluevista.fpvracing.server.entities;
 
-import com.bluevista.fpvracing.server.EntityRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.network.FMLPlayMessages;
@@ -13,31 +12,55 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class ViewHandler extends Entity {
 
+    private AxisAlignedBB nullAABB;
     private Entity target;
+
+    private double CamPosX;
+    private double CamPosZ;
+    private double CamPosY;
 
     public ViewHandler(EntityType<?> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
+        this.noClip = true;
+        this.nullAABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     }
 
     public ViewHandler(FMLPlayMessages.SpawnEntity packet, World worldIn) {
-        this(EntityRegistry.VIEW, worldIn);
+        this(EntityType.PLAYER, worldIn);
     }
 
     public ViewHandler(World worldIn, Entity target) {
-        this(EntityRegistry.VIEW, worldIn);
+        this(EntityType.PLAYER, worldIn);
         this.setTarget(target);
+
+        this.rotationYaw = target.rotationYaw;
+        this.prevRotationYaw = target.rotationYaw;
+        this.rotationPitch = 0.0F;
+        this.prevRotationPitch = 0.0F;
+        this.setPosition(target.posX, target.posY, target.posZ);
+        this.prevPosX = target.prevPosX;
+        this.prevPosY = target.prevPosY;
+        this.prevPosZ = target.prevPosZ;
     }
 
-    public void viewTick(float delta) {
-//        if(target != null) {
-//            this.setPosition(target.posX, target.posY, target.posZ);
-//        }
-    }
+    public void clientTick(float delta) {
+        if(target != null) {
 
-    public void tick() {
-//        if(target != null) {
-//            this.setPosition(target.posX, target.posY, target.posZ);
-//        }
+            double deltaPosX = this.target.prevPosX + (this.target.posX - this.target.prevPosX) * (double)delta;
+            double deltaPosY = this.target.prevPosY + (this.target.posY - this.target.prevPosY) * (double)delta;
+            double deltaPosZ = this.target.prevPosZ + (this.target.posZ - this.target.prevPosZ) * (double)delta;
+
+            this.CamPosX = deltaPosX; //- Math.sin(this.CamRadialXZ) * Math.cos(this.CamRadialY) * distance;
+            this.CamPosZ = deltaPosZ; // - Math.cos(this.CamRadialXZ) * Math.cos(this.CamRadialY) * distance;
+            this.CamPosY = deltaPosY; // + Math.sin(this.CamRadialY) * distance * Math.cos((double)(this.yawOffset * this.degToRad));
+
+            this.setPosition(this.CamPosX, this.CamPosY, this.CamPosZ);
+
+            this.prevPosX = this.posX;
+            this.prevPosY = this.posY;
+            this.prevPosZ = this.posZ;
+            this.setPosition(target.posX, target.posY, target.posZ);
+        }
     }
 
     public Entity getTarget() {
@@ -48,21 +71,25 @@ public class ViewHandler extends Entity {
         this.target = target;
     }
 
-    @Override
-    protected void registerData() {
+    public AxisAlignedBB getCollisionBoundingBox() {
+        return null;
     }
-
-    @Override
-    protected void readAdditional(CompoundNBT compound) {
+    public AxisAlignedBB getBoundingBox() {
+        return this.nullAABB;
     }
-
-    @Override
-    protected void writeAdditional(CompoundNBT compound) {
+    public boolean canBeCollidedWith() {
+        return false;
     }
-
-    @Override
+    public boolean isSneaking() {
+        return false;
+    }
+    public boolean isSpectator() {
+        return false;
+    }
+    protected void registerData() { }
+    protected void readAdditional(CompoundNBT compound) { }
+    protected void writeAdditional(CompoundNBT compound) { }
     public IPacket<?> createSpawnPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
-
 }

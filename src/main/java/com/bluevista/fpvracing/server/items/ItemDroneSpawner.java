@@ -2,7 +2,6 @@ package com.bluevista.fpvracing.server.items;
 
 import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;

@@ -48,7 +48,7 @@ public class DroneEntity extends Entity {
 
 	public void movementTick(float delta) {
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
-		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.5);
+		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.0);
 		this.move(MoverType.PLAYER, this.getMotion());
 	}
 
