@@ -1,13 +1,11 @@
 package com.bluevista.fpvracing.server.entities;
 
-import com.bluevista.fpvracing.client.events.RenderEvents;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.server.math.QuaternionHelper;
 
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -40,16 +38,9 @@ public class DroneEntity extends Entity {
 	@Override
 	public void tick() {
 		super.tick();
-
-		if(RenderEvents.currentDrone != this) {
-			movementTick(1);
-		}
-	}
-
-	public void movementTick(float delta) {
 		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
-		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.0);
-		this.move(MoverType.PLAYER, this.getMotion());
+//		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.0);
+//		this.move(MoverType.PLAYER, this.getMotion());
 	}
 
 //	@Override
