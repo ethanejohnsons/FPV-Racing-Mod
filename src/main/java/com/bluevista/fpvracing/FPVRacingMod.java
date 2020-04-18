@@ -22,6 +22,7 @@ public class FPVRacingMod {
     public static final String MODID = "fpvracingmod";
     private static final Logger LOGGER = LogManager.getLogger();
 
+
     public FPVRacingMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);

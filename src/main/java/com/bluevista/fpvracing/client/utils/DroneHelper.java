@@ -4,8 +4,8 @@ import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 
 //import com.bluevista.fpvracing.FPVRacingMod;
-//import com.bluevista.fpvracing.client.controls.Transmitter;
-import com.bluevista.fpvracing.server.math.QuaternionHelper;
+//import com.bluevista.fpvracing.client.controls.Controller;
+import com.bluevista.fpvracing.client.math.QuaternionHelper;
 
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -103,7 +103,7 @@ public class DroneHelper {
 			order[3] = 3;
 		}
     	
-//		Transmitter t = FPVRacingMod.transmitter;
+//		Controller t = FPVRacingMod.transmitter;
 //		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
 //		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
 //		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll

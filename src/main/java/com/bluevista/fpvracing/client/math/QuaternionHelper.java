@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.server.math;
+package com.bluevista.fpvracing.client.math;
 
 import java.nio.FloatBuffer;
 

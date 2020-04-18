@@ -1,9 +1,9 @@
 package com.bluevista.fpvracing.server.entities;
 
+import com.bluevista.fpvracing.client.controls.Controller;
 import com.bluevista.fpvracing.server.EntityRegistry;
-import com.bluevista.fpvracing.server.math.QuaternionHelper;
+import com.bluevista.fpvracing.client.math.QuaternionHelper;
 
-import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,12 +21,13 @@ import java.util.List;
 
 public class DroneEntity extends Entity {
 
-	protected CompoundNBT properties = new CompoundNBT();
-	protected Quaternion orientation;
+	private CompoundNBT properties;
+	private Quaternion orientation;
 
 	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
 		super(entityTypeIn, worldIn);
-		this.orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
+		orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
+		properties = new CompoundNBT();
 		properties.putInt("channel", 0);
 		// TODO nbt tags - channel, camera_angle, etc.
 	}
@@ -38,7 +39,8 @@ public class DroneEntity extends Entity {
 	@Override
 	public void tick() {
 		super.tick();
-		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
+		controllerInput();
+//		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
 //		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.0);
 //		this.move(MoverType.PLAYER, this.getMotion());
 	}
@@ -58,13 +60,13 @@ public class DroneEntity extends Entity {
 //        this.setNoGravity(false);
 //	}
 
-//	public void control() {
-//		this.changePitch((float) axis[0]);
-//		this.changeYaw((float) axis[1]);
-//		this.changeRoll((float) axis[2]);
-//		this.setThrottle((float) axis[3]);
-//	}
-	
+	public void controllerInput() {
+		changePitch(100 * Controller.getAxis(1));
+		changeYaw(100 * Controller.getAxis(2));
+		changeRoll(100 * Controller.getAxis(3));
+//		this.setThrottle((float) Controller.getAxis(3));
+	}
+
 	public void changePitch(float angle) {
 		orientation = QuaternionHelper.rotateX(orientation, angle);
 	}
@@ -76,33 +78,6 @@ public class DroneEntity extends Entity {
 	public void changeYaw(float angle) {
 		orientation = QuaternionHelper.rotateY(orientation, angle);
 	}
-
-//    @SideOnly(Side.CLIENT)
-//    public void updateInputs() {
-//    	int[] order = new int[4];
-//		if(OSValidator.isMac()) {
-//			order[0] = 2;
-//			order[1] = 3;
-//			order[2] = 1;
-//			order[3] = 0;
-//		} else {
-//			order[0] = 1;
-//			order[1] = 0;
-//			order[2] = 2;
-//			order[3] = 3;
-//		}
-    	
-//		Transmitter t = FPVRacingMod.transmitter;
-//		axis[0] = -t.getFilteredAxis(order[0], 1.0f, 0.5f, 0.65f); // pitch
-//		axis[1] = -t.getFilteredAxis(order[1], 1.0f, 0.5f, 0.65f); // yaw
-//		axis[2] = -t.getFilteredAxis(order[2], 1.0f, 0.5f, 0.65f); // roll
-//		axis[3] = (t.getRawAxis(	 order[3]) + 1) / 15;		   // throttle
-//    }
-    
-//    public static void setPlayerUsing(PlayerEntity p, DroneEntity d) {
-//    	playerUsing = p;
-//    	droneBeingUsed = d;
-//    }
 
 	public void setChannel(int channel) {
 		this.properties.putInt("channel", channel);
