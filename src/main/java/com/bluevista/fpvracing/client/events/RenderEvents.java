@@ -5,7 +5,6 @@ import com.bluevista.fpvracing.client.math.QuaternionHelper;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
 import com.bluevista.fpvracing.server.items.ItemGoggles;
-import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -15,9 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.registries.ObjectHolder;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 @ObjectHolder(FPVRacingMod.MODID)
 @OnlyIn(Dist.CLIENT)
@@ -73,7 +70,7 @@ public class RenderEvents {
 				); // Applies to screen
 			}
 		} else {
-//			GL11.glRotated(0, 1f, 1f, 1f);
+			GL11.glRotated(0, 1f, 1f, 1f);
 		}
 	}
 
