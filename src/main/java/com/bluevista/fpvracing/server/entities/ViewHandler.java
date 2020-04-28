@@ -37,7 +37,7 @@ public class ViewHandler extends Entity {
         this.prevRotationYaw = target.rotationYaw;
         this.rotationPitch = 0.0F;
         this.prevRotationPitch = 0.0F;
-        this.setPosition(target.posX, target.posY, target.posZ);
+        this.setPosition(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ());
         this.prevPosX = target.prevPosX;
         this.prevPosY = target.prevPosY;
         this.prevPosZ = target.prevPosZ;
@@ -46,9 +46,9 @@ public class ViewHandler extends Entity {
     public void clientTick(float delta) {
         if(target != null) {
 
-            double deltaPosX = this.target.prevPosX + (this.target.posX - this.target.prevPosX) * (double)delta;
-            double deltaPosY = this.target.prevPosY + (this.target.posY - this.target.prevPosY) * (double)delta;
-            double deltaPosZ = this.target.prevPosZ + (this.target.posZ - this.target.prevPosZ) * (double)delta;
+            double deltaPosX = this.target.prevPosX + (this.target.getPosition().getX() - this.target.prevPosX) * (double)delta;
+            double deltaPosY = this.target.prevPosY + (this.target.getPosition().getY() - this.target.prevPosY) * (double)delta;
+            double deltaPosZ = this.target.prevPosZ + (this.target.getPosition().getZ() - this.target.prevPosZ) * (double)delta;
 
             this.CamPosX = deltaPosX;
             this.CamPosZ = deltaPosZ;
@@ -56,9 +56,9 @@ public class ViewHandler extends Entity {
 
             this.setPosition(this.CamPosX, this.CamPosY, this.CamPosZ);
 
-            this.prevPosX = this.posX;
-            this.prevPosY = this.posY;
-            this.prevPosZ = this.posZ;
+            this.prevPosX = this.getPosition().getX();
+            this.prevPosY = this.getPosition().getY();
+            this.prevPosZ = this.getPosition().getZ();
         }
     }
 

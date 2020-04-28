@@ -21,13 +21,13 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
     }
 
     public void doRender(DroneEntity entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        GlStateManager.pushMatrix();
-        this.bindEntityTexture(entity);
-        this.setupRotation(entity, entityYaw, partialTicks);
-        this.setupTranslation(x, y, z);
-        droneModel.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-        GlStateManager.popMatrix();
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+//        GlStateManager.pushMatrix();
+//        this.bindEntityTexture(entity);
+//        this.setupRotation(entity, entityYaw, partialTicks);
+//        this.setupTranslation(x, y, z);
+//        droneModel.render(entity, partialTicks, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+//        GlStateManager.popMatrix();
+//        super.doRender(entity, x, y, z, entityYaw, partialTicks);
     }
 
     public void setupRotation(DroneEntity entityIn, float entityYaw, float partialTicks) {
@@ -35,7 +35,7 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
     }
 
     public void setupTranslation(double x, double y, double z) {
-        GlStateManager.translatef((float)x, (float)y + 0.375F, (float)z);
+//        GlStateManager.translatef((float)x, (float)y + 0.375F, (float)z);
     }
 
 //    @Override
@@ -58,7 +58,7 @@ public class DroneRenderer extends EntityRenderer<DroneEntity> {
      */
     @Nullable
     @Override
-    protected ResourceLocation getEntityTexture(DroneEntity drone) {
+    public ResourceLocation getEntityTexture(DroneEntity drone) {
         return droneTexture;
     }
 }

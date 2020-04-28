@@ -20,7 +20,7 @@ public class ItemDroneSpawner extends Item {
 		World world = context.getWorld();
 		if (!world.isRemote) {
 			BlockPos pos = context.getPos().add(0, 1, 0);
-			DroneEntity d = new DroneEntity(EntityRegistry.DRONE, world);
+			DroneEntity d = new DroneEntity(EntityRegistry.DRONE.get(), world);
 			d.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			world.addEntity(d);
 //			EntityRegistry.DRONE.spawn(world, context.getItem(), context.getPlayer(), pos, SpawnReason.SPAWNER, false, false);

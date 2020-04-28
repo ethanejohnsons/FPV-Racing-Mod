@@ -3,11 +3,11 @@ package com.bluevista.fpvracing.client.math;
 import java.nio.FloatBuffer;
 
 import javax.vecmath.AxisAngle4f;
+import javax.vecmath.Vector3f;
 
-import org.lwjgl.BufferUtils;
 import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Matrix4f;
-import net.minecraft.client.renderer.Vector3f;
+import org.lwjgl.BufferUtils;
+//import net.minecraft.client.renderer.Vector3f;
 
 public class QuaternionHelper {
 	

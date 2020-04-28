@@ -1,7 +1,6 @@
 package com.bluevista.fpvracing.client.utils;
 
 import net.minecraft.client.renderer.Quaternion;
-import net.minecraft.client.renderer.Vector3f;
 
 //import com.bluevista.fpvracing.FPVRacingMod;
 //import com.bluevista.fpvracing.client.controls.Controller;
@@ -9,6 +8,8 @@ import com.bluevista.fpvracing.client.math.QuaternionHelper;
 
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
+
+import javax.vecmath.Vector3f;
 
 public class DroneHelper {
 	

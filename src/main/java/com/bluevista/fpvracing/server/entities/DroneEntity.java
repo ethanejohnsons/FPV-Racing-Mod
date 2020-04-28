@@ -4,6 +4,7 @@ import com.bluevista.fpvracing.client.controls.Controller;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import com.bluevista.fpvracing.client.math.QuaternionHelper;
 
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,7 +14,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-import net.minecraft.client.renderer.Quaternion;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -26,14 +26,14 @@ public class DroneEntity extends Entity {
 
 	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
 		super(entityTypeIn, worldIn);
-		orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
+		orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 90);
 		properties = new CompoundNBT();
 		properties.putInt("channel", 0);
 		// TODO nbt tags - channel, camera_angle, etc.
 	}
 
 	public DroneEntity(FMLPlayMessages.SpawnEntity packet, World worldIn) {
-		this(EntityRegistry.DRONE, worldIn);
+		this(EntityRegistry.DRONE.get(), worldIn);
 	}
 
 	@Override
@@ -45,38 +45,10 @@ public class DroneEntity extends Entity {
 //		this.move(MoverType.PLAYER, this.getMotion());
 	}
 
-//	@Override
-//	public void tick() {
-//		super.tick();
-//
-//		if(isPlayerUsing(this)) {
-//			updateInputs();
-//			control();
-//		}
-//
-//		doPhysics();
-//
-//        this.move(MoverType.SELF, this.getMotion());
-//        this.setNoGravity(false);
-//	}
-
 	public void controllerInput() {
-		changePitch(100 * Controller.getAxis(1));
-		changeYaw(100 * Controller.getAxis(2));
-		changeRoll(100 * Controller.getAxis(3));
-//		this.setThrottle((float) Controller.getAxis(3));
-	}
-
-	public void changePitch(float angle) {
-		orientation = QuaternionHelper.rotateX(orientation, angle);
-	}
-	
-	public void changeRoll(float angle) {
-		orientation = QuaternionHelper.rotateZ(orientation, angle);
-	}
-	
-	public void changeYaw(float angle) {
-		orientation = QuaternionHelper.rotateY(orientation, angle);
+		orientation = QuaternionHelper.rotateX(orientation, Controller.getAxis(1));
+		orientation = QuaternionHelper.rotateY(orientation, Controller.getAxis(2));
+		orientation = QuaternionHelper.rotateZ(orientation, Controller.getAxis(3));
 	}
 
 	public void setChannel(int channel) {
@@ -117,14 +89,14 @@ public class DroneEntity extends Entity {
 
 	@Override
 	public EntityType<?> getType() {
-		return EntityRegistry.DRONE;
+		return EntityRegistry.DRONE.get();
 	}
 
 	public static DroneEntity getNearestDroneTo(Entity entity) {
 		World world = entity.getEntityWorld();
 		List<DroneEntity> drones = world.getEntitiesWithinAABB(DroneEntity.class,
-				new AxisAlignedBB(entity.posX-100, entity.posY-100, entity.posZ-100,
-						entity.posX+100, entity.posY+100, entity.posZ+100));
+				new AxisAlignedBB(entity.getPosition().getX()-100, entity.getPosition().getY()-100, entity.getPosition().getZ()-100,
+						entity.getPosition().getX()+100, entity.getPosition().getY()+100, entity.getPosition().getZ()+100));
 		if(drones.size() > 0) return drones.get(0);
 		else return null;
 	}
