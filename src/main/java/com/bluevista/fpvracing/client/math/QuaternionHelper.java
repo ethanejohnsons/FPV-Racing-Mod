@@ -5,9 +5,9 @@ import java.nio.FloatBuffer;
 import javax.vecmath.AxisAngle4f;
 import javax.vecmath.Vector3f;
 
+import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.Quaternion;
 import org.lwjgl.BufferUtils;
-//import net.minecraft.client.renderer.Vector3f;
 
 public class QuaternionHelper {
 	
@@ -82,31 +82,38 @@ public class QuaternionHelper {
 //        buffer.put(mat.m31);
 //        buffer.put(mat.m32);
 //        buffer.put(mat.m33);
- 
+
         buffer.flip();
-        
+
         return buffer;
     }
-	
+
+//	public static Matrix4f quatToMatrix(Quaternion q) {
+//		Matrix4f mat = new Matrix4f();
+//		mat.
+//		mat.func_226596_a_(q);
+//		return mat;
+//	}
+
 	public static Matrix4f quatToMatrix(Quaternion q) {
 		Matrix4f mat = new Matrix4f();
-		
+
 	    double sqw = q.getW() * q.getW();
 	    double sqx = q.getX() * q.getX();
 	    double sqy = q.getY() * q.getY();
 	    double sqz = q.getZ() * q.getZ();
 
-	    // invs (inverse square length) is only required if quaternion is not already normalised
+//	     invs (inverse square length) is only required if quaternion is not already normalised
 	    double invs = 1 / (sqx + sqy + sqz + sqw);
 	    mat.set(0, 0, (float) (( sqx - sqy - sqz + sqw)*invs)); // since sqw + sqx + sqy + sqz =1/invs*invs
 	    mat.set(1, 1, (float) ((-sqx + sqy - sqz + sqw)*invs));
 	    mat.set(2, 2, (float) ((-sqx - sqy + sqz + sqw)*invs));
-	    
+
 	    double tmp1 = q.getX() * q.getY();
 	    double tmp2 = q.getZ() * q.getW();
 	    mat.set(1, 0, (float) (2.0 * (tmp1 + tmp2)*invs));
 	    mat.set(0, 1, (float) (2.0 * (tmp1 - tmp2)*invs));
-	    
+
 	    tmp1 = q.getX() * q.getZ();
 	    tmp2 = q.getY() * q.getW();
 	    mat.set(2, 0, (float) (2.0 * (tmp1 - tmp2)*invs));
@@ -115,8 +122,7 @@ public class QuaternionHelper {
 	    tmp2 = q.getX() * q.getW();
 	    mat.set(2, 1, (float) (2.0 * (tmp1 + tmp2)*invs));
 	    mat.set(1, 2, (float) (2.0 * (tmp1 - tmp2)*invs));
-	    
+
 	    return mat;
 	}
-
 }

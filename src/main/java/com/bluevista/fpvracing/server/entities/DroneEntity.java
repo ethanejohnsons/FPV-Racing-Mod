@@ -46,9 +46,10 @@ public class DroneEntity extends Entity {
 	}
 
 	public void controllerInput() {
-		orientation = QuaternionHelper.rotateX(orientation, Controller.getAxis(1));
-		orientation = QuaternionHelper.rotateY(orientation, Controller.getAxis(2));
-		orientation = QuaternionHelper.rotateZ(orientation, Controller.getAxis(3));
+		orientation = QuaternionHelper.rotateX(orientation, Controller.getAxis(1)*100);
+		orientation = QuaternionHelper.rotateY(orientation, Controller.getAxis(2)*100);
+		orientation = QuaternionHelper.rotateZ(orientation, Controller.getAxis(3)*100);
+		System.out.println(orientation.getX());
 	}
 
 	public void setChannel(int channel) {
