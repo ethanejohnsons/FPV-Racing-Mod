@@ -5,19 +5,15 @@ import com.bluevista.fpvracing.client.math.QuaternionHelper;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
 import com.bluevista.fpvracing.server.items.ItemGoggles;
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.renderer.*;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.registries.ObjectHolder;
-import org.lwjgl.opengl.GL11;
 
 @ObjectHolder(FPVRacingMod.MODID)
 @OnlyIn(Dist.CLIENT)

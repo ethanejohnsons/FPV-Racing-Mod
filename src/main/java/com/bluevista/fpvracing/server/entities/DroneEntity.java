@@ -49,11 +49,7 @@ public class DroneEntity extends Entity {
 	}
 
 	public void controllerInput() {
-		orientation = QuaternionHelper.rotateX(orientation, -Controller.getAxis(2)*10);
-		orientation = QuaternionHelper.rotateY(orientation, -Controller.getAxis(3)*10);
-		orientation = QuaternionHelper.rotateZ(orientation, -Controller.getAxis(1)*10);
-		throttle = Controller.getAxis(0) * 10;
-		System.out.println(Controller.getAxis(0) * 10);
+
 	}
 
 	public void setChannel(int channel) {
@@ -67,6 +63,18 @@ public class DroneEntity extends Entity {
     public Quaternion getOrientation() {
     	return orientation;
     }
+
+    public void setOrientation(Quaternion q) {
+		orientation = q;
+	}
+
+	public float getThrottle() {
+		return throttle;
+	}
+
+	public void setThrottle(float throttle) {
+		this.throttle = throttle;
+	}
 
     @Override
 	public boolean processInitialInteract(PlayerEntity player, Hand hand) {
