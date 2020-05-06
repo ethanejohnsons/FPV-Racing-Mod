@@ -3,14 +3,30 @@ package com.bluevista.fpvracing.client.math;
 import java.nio.FloatBuffer;
 
 import javax.vecmath.AxisAngle4f;
-import javax.vecmath.Vector3f;
+import javax.vecmath.Quat4d;
 
+import com.mojang.blaze3d.platform.GLX;
 import net.minecraft.client.renderer.Matrix4f;
 import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.util.LWJGLMemoryUntracker;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryUtil;
 
 public class QuaternionHelper {
-	
+
+	private static FloatBuffer MATRIX_BUFFER = GLX.make(MemoryUtil.memAllocFloat(16), (p_209238_0_) -> {
+		LWJGLMemoryUntracker.untrack(MemoryUtil.memAddress(p_209238_0_));
+	});
+
+	public static void applyRotQuat(Quaternion q) {
+		Matrix4f mat = new Matrix4f(q);
+		mat.write(MATRIX_BUFFER, true);
+		MATRIX_BUFFER.rewind();
+		GL11.glMultMatrixf(MATRIX_BUFFER);
+	}
+
 	public static AxisAngle4f toAxisAngle(Quaternion quat, AxisAngle4f angle) {
 		float divisor = (float) Math.sqrt(1 - quat.getW() * quat.getW());
 		angle.setAngle((float) (2 * Math.acos(quat.getW())));
@@ -26,22 +42,17 @@ public class QuaternionHelper {
 		quat.multiply(rot);
 		return quat;
 	}
-	
-	// Old:
-	// return Quaternion.mul(Quaternion.mul(rot, quat, new Quaternion()), Quaternion.negate(rot, new Quaternion()), new Quaternion());
 
-	public static Quaternion rotateX(Quaternion quat, float amount) {	    
+	public static Quaternion rotateX(Quaternion quat, float amount) {
 	    double radHalfAngle = Math.toRadians((double) amount) / 2.0;
 	    Quaternion rot = new Quaternion((float) Math.sin(radHalfAngle), 0.0f, 0.0f, (float) Math.cos(radHalfAngle));
-
 	    quat.multiply(rot);
 		return quat;
 	}
 	
-	public static Quaternion rotateY(Quaternion quat, float amount) {	    
+	public static Quaternion rotateY(Quaternion quat, float amount) {
 	    double radHalfAngle = Math.toRadians((double) amount) / 2.0;
 	    Quaternion rot = new Quaternion(0.0f, (float) Math.sin(radHalfAngle), 0.0f, (float) Math.cos(radHalfAngle));
-
 	    quat.multiply(rot);
 		return quat;
 	}
@@ -49,7 +60,6 @@ public class QuaternionHelper {
 	public static Quaternion rotateZ(Quaternion quat, float amount) {
 	    double radHalfAngle = Math.toRadians((double) amount) / 2.0;
 	    Quaternion rot = new Quaternion(0.0f, 0.0f, (float) Math.sin(radHalfAngle), (float) Math.cos(radHalfAngle));
-
 	    quat.multiply(rot);
 	    return quat;
 	}
@@ -58,8 +68,7 @@ public class QuaternionHelper {
 		return new Vector3f(mat.get(0,2), mat.get(1,2), mat.get(2,2));
 	}
 	
-    public static FloatBuffer toBuffer(Matrix4f mat)
-    {
+    public static FloatBuffer toBuffer(Matrix4f mat) {
         FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
 
         for(int i = 0; i < 4; i++)
@@ -87,13 +96,6 @@ public class QuaternionHelper {
 
         return buffer;
     }
-
-//	public static Matrix4f quatToMatrix(Quaternion q) {
-//		Matrix4f mat = new Matrix4f();
-//		mat.
-//		mat.func_226596_a_(q);
-//		return mat;
-//	}
 
 	public static Matrix4f quatToMatrix(Quaternion q) {
 		Matrix4f mat = new Matrix4f();
@@ -124,5 +126,36 @@ public class QuaternionHelper {
 	    mat.set(1, 2, (float) (2.0 * (tmp1 - tmp2)*invs));
 
 	    return mat;
+	}
+
+	public static javax.vecmath.Matrix4f quatToMatrix(Quat4d q) {
+		javax.vecmath.Matrix4f mat = new javax.vecmath.Matrix4f();
+
+		double sqw = q.w*q.w;
+		double sqx = q.x*q.x;
+		double sqy = q.y*q.y;
+		double sqz = q.z*q.z;
+
+//		 invs (inverse square length) is only required if quaternion is not already normalised
+		double invs = 1 / (sqx + sqy + sqz + sqw);
+		mat.m00 = (float) (( sqx - sqy - sqz + sqw)*invs) ; // since sqw + sqx + sqy + sqz =1/invs*invs
+		mat.m11 = (float) ((-sqx + sqy - sqz + sqw)*invs) ;
+		mat.m22 = (float) ((-sqx - sqy + sqz + sqw)*invs) ;
+
+		double tmp1 = q.x*q.y;
+		double tmp2 = q.z*q.w;
+		mat.m10 = (float) (2.0 * (tmp1 + tmp2)*invs) ;
+		mat.m01 = (float) (2.0 * (tmp1 - tmp2)*invs) ;
+
+		tmp1 = q.x*q.z;
+		tmp2 = q.y*q.w;
+		mat.m20 = (float) (2.0 * (tmp1 - tmp2)*invs) ;
+		mat.m02 = (float) (2.0 * (tmp1 + tmp2)*invs) ;
+		tmp1 = q.y*q.z;
+		tmp2 = q.x*q.w;
+		mat.m21 = (float) (2.0 * (tmp1 + tmp2)*invs) ;
+		mat.m12 = (float) (2.0 * (tmp1 - tmp2)*invs) ;
+
+		return mat;
 	}
 }

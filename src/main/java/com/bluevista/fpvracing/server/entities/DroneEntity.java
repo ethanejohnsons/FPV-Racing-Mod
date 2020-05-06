@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
 
+import javax.vecmath.Quat4d;
 import java.util.List;
 
 public class DroneEntity extends Entity {
@@ -24,9 +25,11 @@ public class DroneEntity extends Entity {
 	private CompoundNBT properties;
 	private Quaternion orientation;
 
+	private float throttle = 0.0f;
+
 	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
 		super(entityTypeIn, worldIn);
-		orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 90);
+		orientation = new Quaternion(0, 1, 0, 0);//QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 90);
 		properties = new CompoundNBT();
 		properties.putInt("channel", 0);
 		// TODO nbt tags - channel, camera_angle, etc.
@@ -46,10 +49,11 @@ public class DroneEntity extends Entity {
 	}
 
 	public void controllerInput() {
-		orientation = QuaternionHelper.rotateX(orientation, Controller.getAxis(1)*100);
-		orientation = QuaternionHelper.rotateY(orientation, Controller.getAxis(2)*100);
-		orientation = QuaternionHelper.rotateZ(orientation, Controller.getAxis(3)*100);
-		System.out.println(orientation.getX());
+		orientation = QuaternionHelper.rotateX(orientation, -Controller.getAxis(2)*10);
+		orientation = QuaternionHelper.rotateY(orientation, -Controller.getAxis(3)*10);
+		orientation = QuaternionHelper.rotateZ(orientation, -Controller.getAxis(1)*10);
+		throttle = Controller.getAxis(0) * 10;
+		System.out.println(Controller.getAxis(0) * 10);
 	}
 
 	public void setChannel(int channel) {
