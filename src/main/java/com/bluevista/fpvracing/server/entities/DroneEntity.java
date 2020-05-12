@@ -51,9 +51,8 @@ public class DroneEntity extends Entity {
 
 		if(RenderHandler.isPlayerViewingDrone()) {
 			Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(getOrientation()));
-			this.addVelocity(-0.005, 0, 0);
+			this.setVelocity(-0.5, 0.1, 0);
 //			this.addVelocity(-d.getX() * throttle, d.getY() * throttle, -d.getZ() * throttle);
-			System.out.println("Motion: " + getMotion());
 			this.move(MoverType.SELF, this.getMotion());
 			if(!world.isRemote) {
 				PlayerEntity playerSP = RenderHandler.getPlayer();

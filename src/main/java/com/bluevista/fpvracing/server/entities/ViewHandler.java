@@ -15,10 +15,6 @@ public class ViewHandler extends Entity {
     private AxisAlignedBB nullAABB;
     private Entity target;
 
-    private double CamPosX;
-    private double CamPosZ;
-    private double CamPosY;
-
     public ViewHandler(EntityType<?> entityTypeIn, World worldIn) {
         super(entityTypeIn, worldIn);
         this.noClip = true;
@@ -33,32 +29,23 @@ public class ViewHandler extends Entity {
         this(EntityType.PLAYER, worldIn);
         this.setTarget(target);
 
-        this.rotationYaw = target.rotationYaw;
-        this.prevRotationYaw = target.rotationYaw;
-        this.rotationPitch = 0.0F;
-        this.prevRotationPitch = 0.0F;
-        this.setPosition(target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ());
-        this.prevPosX = target.prevPosX;
-        this.prevPosY = target.prevPosY;
-        this.prevPosZ = target.prevPosZ;
+        this.setPosition(target.getPositionVec().x, target.getPositionVec().y, target.getPositionVec().z);
+        this.prevPosX = target.getPositionVec().x;
+        this.prevPosY = target.getPositionVec().y;
+        this.prevPosZ = target.getPositionVec().z;
     }
 
     public void clientTick(float delta) {
         if(target != null) {
+            float deltaPosX = (float) (this.prevPosX + (this.target.getPositionVec().x - this.prevPosX) * delta);
+            float deltaPosY = (float) (this.prevPosY + (this.target.getPositionVec().y - this.prevPosY) * delta);
+            float deltaPosZ = (float) (this.prevPosZ + (this.target.getPositionVec().z - this.prevPosZ) * delta);
 
-            double deltaPosX = this.target.prevPosX + (this.target.getPosition().getX() - this.target.prevPosX) * (double)delta;
-            double deltaPosY = this.target.prevPosY + (this.target.getPosition().getY() - this.target.prevPosY) * (double)delta;
-            double deltaPosZ = this.target.prevPosZ + (this.target.getPosition().getZ() - this.target.prevPosZ) * (double)delta;
+            this.setPosition(deltaPosX, deltaPosY, deltaPosZ);
 
-            this.CamPosX = deltaPosX;
-            this.CamPosZ = deltaPosZ;
-            this.CamPosY = deltaPosY;
-
-            this.setPosition(this.CamPosX, this.CamPosY, this.CamPosZ);
-
-            this.prevPosX = this.getPosition().getX();
-            this.prevPosY = this.getPosition().getY();
-            this.prevPosZ = this.getPosition().getZ();
+            this.prevPosX = this.getPositionVec().x;
+            this.prevPosY = this.getPositionVec().y;
+            this.prevPosZ = this.getPositionVec().z;
         }
     }
 

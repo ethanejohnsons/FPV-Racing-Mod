@@ -57,22 +57,12 @@ public class RenderHandler {
 						view = new ViewHandler(mc.world, currentDrone);
 						mc.setRenderViewEntity(view);
 					}
+
 				} else if (((ViewHandler) mc.getRenderViewEntity()).getTarget() instanceof DroneEntity) {
 						DroneEntity drone = (DroneEntity) ((ViewHandler) mc.getRenderViewEntity()).getTarget();
-
-						float currX = -Controller.getAxis(2) * 10;
-						float currY = -Controller.getAxis(3) * 10;
-						float currZ = -Controller.getAxis(1) * 10;
-
-						float deltaX = prevX + (currX - prevX) * event.renderTickTime;
-						float deltaY = prevY + (currY - prevY) * event.renderTickTime;
-						float deltaZ = prevZ + (currZ - prevZ) * event.renderTickTime;
-
-						drone.setOrientation(QuaternionHelper.rotateX(drone.getOrientation(), deltaX));
-						drone.setOrientation(QuaternionHelper.rotateY(drone.getOrientation(), deltaY));
-						drone.setOrientation(QuaternionHelper.rotateZ(drone.getOrientation(), deltaZ));
-						drone.setThrottle(Controller.getAxis(0) + 1);
+						inputTick(drone, event.renderTickTime);
 				}
+
 			} else if(mc.getRenderViewEntity() instanceof ViewHandler) {
 				view = null;
 				mc.setRenderViewEntity(mc.player); // switch back to player
@@ -90,6 +80,25 @@ public class RenderHandler {
 				QuaternionHelper.applyRotQuat(drone.getOrientation());
 			}
 		}
+	}
+
+	public static void inputTick(DroneEntity drone, float delta) {
+		float currX = -Controller.getAxis(2);
+		float currY = -Controller.getAxis(3);
+		float currZ = -Controller.getAxis(1);
+
+		float deltaX = prevX + (currX - prevX) * delta;
+		float deltaY = prevY + (currY - prevY) * delta;
+		float deltaZ = prevZ + (currZ - prevZ) * delta;
+
+		drone.setOrientation(QuaternionHelper.rotateX(drone.getOrientation(), deltaX));
+		drone.setOrientation(QuaternionHelper.rotateY(drone.getOrientation(), deltaY));
+		drone.setOrientation(QuaternionHelper.rotateZ(drone.getOrientation(), deltaZ));
+		drone.setThrottle(Controller.getAxis(0) + 1);
+
+		prevX = currX;
+		prevY = currY;
+		prevZ = currZ;
 	}
 
 	public static boolean isPlayerViewingDrone() {
