@@ -1,14 +1,13 @@
 package com.bluevista.fpvracing.client.events;
 
 import com.bluevista.fpvracing.FPVRacingMod;
+import com.bluevista.fpvracing.client.controls.Controller;
 import com.bluevista.fpvracing.client.math.QuaternionHelper;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
 import com.bluevista.fpvracing.server.items.ItemGoggles;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,12 +20,16 @@ import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(FPVRacingMod.MODID)
 @OnlyIn(Dist.CLIENT)
-public class RenderEvents {
+public class RenderHandler {
 
 	public static Minecraft mc = Minecraft.getInstance();
 	public static DroneEntity currentDrone;
 	public static ViewHandler view;
 	public static Vec3d playerPos;
+
+	private static float prevX;
+	private static float prevY;
+	private static float prevZ;
 
 	@SubscribeEvent
 	public static void on(final RenderHandEvent event) {
@@ -41,6 +44,7 @@ public class RenderEvents {
 	public static void on(final TickEvent.RenderTickEvent event) {
 		if (mc.player != null) {
 			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles) { // if the player is holding the goggles
+
 				if (view != null) {
 					view.clientTick(event.renderTickTime); // ...update the ViewHandler...
 //					mc.player.move(MoverType.PLAYER, new Vec3d(playerPos.x - (mc.player.getPositionVec()).x, playerPos.y - (mc.player.getPositionVec()).y, playerPos.z - (mc.player.getPositionVec()).z));
@@ -53,6 +57,21 @@ public class RenderEvents {
 						view = new ViewHandler(mc.world, currentDrone);
 						mc.setRenderViewEntity(view);
 					}
+				} else if (((ViewHandler) mc.getRenderViewEntity()).getTarget() instanceof DroneEntity) {
+						DroneEntity drone = (DroneEntity) ((ViewHandler) mc.getRenderViewEntity()).getTarget();
+
+						float currX = -Controller.getAxis(2) * 10;
+						float currY = -Controller.getAxis(3) * 10;
+						float currZ = -Controller.getAxis(1) * 10;
+
+						float deltaX = prevX + (currX - prevX) * event.renderTickTime;
+						float deltaY = prevY + (currY - prevY) * event.renderTickTime;
+						float deltaZ = prevZ + (currZ - prevZ) * event.renderTickTime;
+
+						drone.setOrientation(QuaternionHelper.rotateX(drone.getOrientation(), deltaX));
+						drone.setOrientation(QuaternionHelper.rotateY(drone.getOrientation(), deltaY));
+						drone.setOrientation(QuaternionHelper.rotateZ(drone.getOrientation(), deltaZ));
+						drone.setThrottle(Controller.getAxis(0) + 1);
 				}
 			} else if(mc.getRenderViewEntity() instanceof ViewHandler) {
 				view = null;

@@ -1,8 +1,7 @@
 package com.bluevista.fpvracing;
 
 import com.bluevista.fpvracing.client.RendererRegistry;
-import com.bluevista.fpvracing.client.events.InputEvents;
-import com.bluevista.fpvracing.client.events.RenderEvents;
+import com.bluevista.fpvracing.client.events.RenderHandler;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,8 +19,7 @@ public class FPVRacingMod {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         EntityRegistry.ENTITY_TYPES.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(RenderEvents.class);
-        MinecraftForge.EVENT_BUS.register(InputEvents.class);
+        MinecraftForge.EVENT_BUS.register(RenderHandler.class);
     }
 
     @SubscribeEvent

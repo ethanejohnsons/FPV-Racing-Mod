@@ -1,9 +1,8 @@
 package com.bluevista.fpvracing.server.entities;
 
-import com.bluevista.fpvracing.client.events.RenderEvents;
+import com.bluevista.fpvracing.client.events.RenderHandler;
 import com.bluevista.fpvracing.client.math.QuaternionHelper;
 import com.bluevista.fpvracing.server.EntityRegistry;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
@@ -50,14 +49,14 @@ public class DroneEntity extends Entity {
 		this.prevPosZ = this.posZ;
 		super.tick();
 
-		if(RenderEvents.isPlayerViewingDrone()) {
+		if(RenderHandler.isPlayerViewingDrone()) {
 			Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(getOrientation()));
 			this.addVelocity(-0.005, 0, 0);
 //			this.addVelocity(-d.getX() * throttle, d.getY() * throttle, -d.getZ() * throttle);
 			System.out.println("Motion: " + getMotion());
 			this.move(MoverType.SELF, this.getMotion());
 			if(!world.isRemote) {
-				PlayerEntity playerSP = RenderEvents.getPlayer();
+				PlayerEntity playerSP = RenderHandler.getPlayer();
 				if (playerSP != null) this.player = (ServerPlayerEntity) world.getPlayerByUuid(playerSP.getUniqueID());
 				if (player != null) {
 					System.out.println(getDistanceSq(player));
