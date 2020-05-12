@@ -5,7 +5,11 @@ import com.bluevista.fpvracing.client.math.QuaternionHelper;
 import com.bluevista.fpvracing.server.entities.DroneEntity;
 import com.bluevista.fpvracing.server.entities.ViewHandler;
 import com.bluevista.fpvracing.server.items.ItemGoggles;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -22,6 +26,7 @@ public class RenderEvents {
 	public static Minecraft mc = Minecraft.getInstance();
 	public static DroneEntity currentDrone;
 	public static ViewHandler view;
+	public static Vec3d playerPos;
 
 	@SubscribeEvent
 	public static void on(final RenderHandEvent event) {
@@ -35,20 +40,24 @@ public class RenderEvents {
 	@SubscribeEvent
 	public static void on(final TickEvent.RenderTickEvent event) {
 		if (mc.player != null) {
-			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles &&
-					DroneEntity.getNearestDroneTo(mc.player) != null) { // if the player is holding goggles...
-
-				if(view != null) view.clientTick(event.renderTickTime); // ...update the ViewHandler...
-
-				if (!(mc.getRenderViewEntity() instanceof ViewHandler)) { // ...and if a ViewHandler doesn't exist, create one
-					currentDrone = DroneEntity.getNearestDroneTo(mc.player);
-					view = new ViewHandler(mc.world, currentDrone);
-					mc.setRenderViewEntity(view);
+			if (mc.player.getHeldItemMainhand().getItem() instanceof ItemGoggles) { // if the player is holding the goggles
+				if (view != null) {
+					view.clientTick(event.renderTickTime); // ...update the ViewHandler...
+//					mc.player.move(MoverType.PLAYER, new Vec3d(playerPos.x - (mc.player.getPositionVec()).x, playerPos.y - (mc.player.getPositionVec()).y, playerPos.z - (mc.player.getPositionVec()).z));
 				}
 
+				if (!(mc.getRenderViewEntity() instanceof ViewHandler)) { // ...and if a ViewHandler doesn't exist, create one
+					currentDrone = DroneEntity.getNearestTo(mc.player);
+					if(currentDrone != null) {
+						playerPos = mc.player.getPositionVec();
+						view = new ViewHandler(mc.world, currentDrone);
+						mc.setRenderViewEntity(view);
+					}
+				}
 			} else if(mc.getRenderViewEntity() instanceof ViewHandler) {
 				view = null;
 				mc.setRenderViewEntity(mc.player); // switch back to player
+				mc.player.setPosition(playerPos.x, playerPos.y, playerPos.z);
 			}
 		}
 	}
@@ -62,5 +71,13 @@ public class RenderEvents {
 				QuaternionHelper.applyRotQuat(drone.getOrientation());
 			}
 		}
+	}
+
+	public static boolean isPlayerViewingDrone() {
+		return view != null;
+	}
+
+	public static ClientPlayerEntity getPlayer() {
+		return mc.player;
 	}
 }

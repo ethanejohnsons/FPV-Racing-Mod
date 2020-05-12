@@ -28,8 +28,7 @@ public class InputEvents {
                 drone.setOrientation(QuaternionHelper.rotateX(drone.getOrientation(), -Controller.getAxis(2) * 10));
                 drone.setOrientation(QuaternionHelper.rotateY(drone.getOrientation(), -Controller.getAxis(3) * 10));
                 drone.setOrientation(QuaternionHelper.rotateZ(drone.getOrientation(), -Controller.getAxis(1) * 10));
-                drone.setThrottle(Controller.getAxis(0) * 10);
-                System.out.println(Controller.getAxis(0) * 10);
+                drone.setThrottle(Controller.getAxis(0) + 1);
             }
         }
     }

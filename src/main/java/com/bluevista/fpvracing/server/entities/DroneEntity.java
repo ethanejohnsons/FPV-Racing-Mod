@@ -1,29 +1,31 @@
 package com.bluevista.fpvracing.server.entities;
 
-import com.bluevista.fpvracing.client.controls.Controller;
-import com.bluevista.fpvracing.server.EntityRegistry;
+import com.bluevista.fpvracing.client.events.RenderEvents;
 import com.bluevista.fpvracing.client.math.QuaternionHelper;
-
+import com.bluevista.fpvracing.server.EntityRegistry;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.Quaternion;
+import net.minecraft.client.renderer.Vector3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
 import net.minecraftforge.fml.network.FMLPlayMessages;
 import net.minecraftforge.fml.network.NetworkHooks;
-
-import javax.vecmath.Quat4d;
 import java.util.List;
 
 public class DroneEntity extends Entity {
 
 	private CompoundNBT properties;
 	private Quaternion orientation;
+	private ServerPlayerEntity player;
 
 	private float throttle = 0.0f;
 
@@ -33,23 +35,39 @@ public class DroneEntity extends Entity {
 		properties = new CompoundNBT();
 		properties.putInt("channel", 0);
 		// TODO nbt tags - channel, camera_angle, etc.
+
+		this.setNoGravity(true);
+		this.setMotion(Vec3d.ZERO);
 	}
 
 	public DroneEntity(FMLPlayMessages.SpawnEntity packet, World worldIn) {
 		this(EntityRegistry.DRONE.get(), worldIn);
 	}
 
-	@Override
 	public void tick() {
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
 		super.tick();
-		controllerInput();
-//		Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(QuaternionHelper.rotateX(this.getOrientation(), (-90) - 20)));
-//		this.addVelocity(-d.getX() * 0, d.getY() * 0, -d.getZ() * 0.0);
-//		this.move(MoverType.PLAYER, this.getMotion());
-	}
 
-	public void controllerInput() {
-
+		if(RenderEvents.isPlayerViewingDrone()) {
+			Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(getOrientation()));
+			this.addVelocity(-0.005, 0, 0);
+//			this.addVelocity(-d.getX() * throttle, d.getY() * throttle, -d.getZ() * throttle);
+			System.out.println("Motion: " + getMotion());
+			this.move(MoverType.SELF, this.getMotion());
+			if(!world.isRemote) {
+				PlayerEntity playerSP = RenderEvents.getPlayer();
+				if (playerSP != null) this.player = (ServerPlayerEntity) world.getPlayerByUuid(playerSP.getUniqueID());
+				if (player != null) {
+					System.out.println(getDistanceSq(player));
+					if(getDistanceSq(player) >= 2500) {
+						player.connection.setPlayerLocation((float) Math.round(getPositionVec().x), 50, (float) Math.round(getPositionVec().z), player.rotationYaw, player.rotationPitch);
+						if (!player.abilities.isCreativeMode) player.abilities.allowFlying = true;
+					}
+				}
+			}
+		}
 	}
 
 	public void setChannel(int channel) {
@@ -105,7 +123,7 @@ public class DroneEntity extends Entity {
 		return EntityRegistry.DRONE.get();
 	}
 
-	public static DroneEntity getNearestDroneTo(Entity entity) {
+	public static DroneEntity getNearestTo(Entity entity) {
 		World world = entity.getEntityWorld();
 		List<DroneEntity> drones = world.getEntitiesWithinAABB(DroneEntity.class,
 				new AxisAlignedBB(entity.getPosition().getX()-100, entity.getPosition().getY()-100, entity.getPosition().getZ()-100,
