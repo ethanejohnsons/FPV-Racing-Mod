@@ -1,4 +1,4 @@
-package com.bluevista.fpvracing.client.events;
+package com.bluevista.fpvracing.client.handler;
 
 import com.bluevista.fpvracing.FPVRacingMod;
 import com.bluevista.fpvracing.client.controls.Controller;

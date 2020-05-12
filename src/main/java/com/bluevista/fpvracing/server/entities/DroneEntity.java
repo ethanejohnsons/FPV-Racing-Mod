@@ -1,6 +1,7 @@
 package com.bluevista.fpvracing.server.entities;
 
-import com.bluevista.fpvracing.client.events.RenderHandler;
+import com.bluevista.fpvracing.client.handler.PhysicsHandler;
+import com.bluevista.fpvracing.client.handler.RenderHandler;
 import com.bluevista.fpvracing.client.math.QuaternionHelper;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import net.minecraft.client.renderer.Quaternion;
@@ -30,7 +31,7 @@ public class DroneEntity extends Entity {
 
 	public DroneEntity(EntityType<?> entityTypeIn, World worldIn) {
 		super(entityTypeIn, worldIn);
-		orientation = new Quaternion(0, 1, 0, 0);//QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 90);
+		orientation = QuaternionHelper.rotateX(new Quaternion(0.0f, 1.0f, 0.0f, 0.0f), 0);
 		properties = new CompoundNBT();
 		properties.putInt("channel", 0);
 		// TODO nbt tags - channel, camera_angle, etc.
@@ -51,9 +52,11 @@ public class DroneEntity extends Entity {
 
 		if(RenderHandler.isPlayerViewingDrone()) {
 			Vector3f d = QuaternionHelper.rotationMatrixToVector(QuaternionHelper.quatToMatrix(getOrientation()));
-			this.setVelocity(-0.5, 0.1, 0);
-//			this.addVelocity(-d.getX() * throttle, d.getY() * throttle, -d.getZ() * throttle);
+			this.addVelocity(d.getY() * throttle / 5, d.getX() * throttle / 5, d.getZ() * throttle / 5);
 			this.move(MoverType.SELF, this.getMotion());
+
+
+			// Player movement things...
 			if(!world.isRemote) {
 				PlayerEntity playerSP = RenderHandler.getPlayer();
 				if (playerSP != null) this.player = (ServerPlayerEntity) world.getPlayerByUuid(playerSP.getUniqueID());
@@ -66,6 +69,7 @@ public class DroneEntity extends Entity {
 				}
 			}
 		}
+
 	}
 
 	public void setChannel(int channel) {

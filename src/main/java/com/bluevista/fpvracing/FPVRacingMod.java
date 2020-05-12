@@ -1,7 +1,8 @@
 package com.bluevista.fpvracing;
 
 import com.bluevista.fpvracing.client.RendererRegistry;
-import com.bluevista.fpvracing.client.events.RenderHandler;
+import com.bluevista.fpvracing.client.handler.PhysicsHandler;
+import com.bluevista.fpvracing.client.handler.RenderHandler;
 import com.bluevista.fpvracing.server.EntityRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -14,12 +15,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(FPVRacingMod.MODID)
 public class FPVRacingMod {
     public static final String MODID = "fpvracingmod";
+    public static PhysicsHandler physicsWorld;
 
     public FPVRacingMod() {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         EntityRegistry.ENTITY_TYPES.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(RenderHandler.class);
+
+        physicsWorld = new PhysicsHandler();
     }
 
     @SubscribeEvent
